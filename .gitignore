@@ -1,0 +1,106 @@
+# ── Virtual Environment ───────────────────────────────────────────────────────
+venv/
+env/
+.venv/
+ENV/
+
+# ── Python Cache ──────────────────────────────────────────────────────────────
+__pycache__/
+*/__pycache__/
+**/__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+
+# ── Model Checkpoints (large binary files) ────────────────────────────────────
+*.pth
+*.pt
+*.ckpt
+*.bin
+*.onnx
+*.h5
+*.pkl
+
+# ── Dataset (downloaded via prepare_data.py) ──────────────────────────────────
+DataSet/
+
+# ── Training Outputs ──────────────────────────────────────────────────────────
+Results/
+
+# ── Jupyter Notebooks ─────────────────────────────────────────────────────────
+.ipynb_checkpoints/
+*.ipynb
+
+# ── Environment / Secrets ─────────────────────────────────────────────────────
+.env
+.env.*
+*.env
+kaggle.json
+secrets.json
+
+# ── API Keys / Credentials ────────────────────────────────────────────────────
+*_api_key*
+*_secret*
+
+# ── Medical Imaging Intermediate Files ────────────────────────────────────────
+*.nii
+*.nii.gz
+*.dcm
+*.dicom
+
+# ── Logs ──────────────────────────────────────────────────────────────────────
+*.log
+logs/
+*.out
+
+# ── OS Files ──────────────────────────────────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+desktop.ini
+
+# ── IDE / Editor ──────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+
+# ── Claude Code ───────────────────────────────────────────────────────────────
+.claude/
+
+# ── Build / Distribution ──────────────────────────────────────────────────────
+dist/
+build/
+*.egg-info/
+*.egg
+.eggs/
+site/
+
+# ── Testing ───────────────────────────────────────────────────────────────────
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# ── Temporary Files ───────────────────────────────────────────────────────────
+*.tmp
+*.temp
+tmp/
+temp/
+
+# ─────────────────────────────────────────────────────────────────────────────
+# NOTE: The following are intentionally TRACKED (not ignored):
+#   demo_results/   — screenshots used in README.md
+#   images/         — architecture diagrams and result comparisons
+#   DataSetSample/  — small sample dataset for quick testing
+#   model/          — folder is tracked; .pth files inside are ignored above
+#   requirements.txt, README.md, app.py, src/ — core project files
+# ─────────────────────────────────────────────────────────────────────────────
+*.pth

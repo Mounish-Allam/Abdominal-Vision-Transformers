@@ -1,0 +1,11 @@
+dill
+scikit-image
+MedPy
+nibabel
+Pillow
+timm>=0.9.0
+torch>=1.13.0
+torchvision>=0.14.0
+gradio>=4.0.0
+groq>=0.9.0
+huggingface_hub>=0.20.0
