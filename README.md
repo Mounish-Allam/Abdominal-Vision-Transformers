@@ -162,9 +162,11 @@ Dataset split used:
 ### Step 1 — Clone the repository
 
 ```bash
-git clone https://github.com/your-username/Multi-Scale-Attention.git
+git clone https://github.com/<your-username>/Multi-Scale-Attention.git
 cd Multi-Scale-Attention
 ```
+
+> Replace `<your-username>` with your actual GitHub handle.
 
 ---
 
@@ -338,16 +340,18 @@ pydicom
 
 ### Quantitative Results (CHAOS MRI — Dice Score)
 
-After training on 497 slices from the CHAOS T2-SPIR dataset:
+> ⏳ **Quantitative benchmarks coming soon.** Full Dice scores per organ will be published here once training on the complete CHAOS T2-SPIR set (497 slices, 20+ epochs) has finished. The Swin Transformer encoder provides strong ImageNet transfer learning, while the DAF decoder learns organ-specific attention maps for multi-scale refinement.
 
-| Organ | Dice Score (2D) |
-|-------|----------------|
-| Liver | in progress |
-| Right Kidney | in progress |
-| Left Kidney | in progress |
-| Spleen | 0.2535 (epoch 1) |
+<!--
+Drop the final per-organ scores in here once training completes, e.g.:
 
-> Results improve significantly with more epochs. The Swin Transformer encoder brings strong transfer learning from ImageNet while the DAF decoder learns organ-specific attention maps.
+| Organ        | Dice Score (2D) |
+|--------------|-----------------|
+| Liver        | 0.xx            |
+| Right Kidney | 0.xx            |
+| Left Kidney  | 0.xx            |
+| Spleen       | 0.xx            |
+-->
 
 ---
 
@@ -357,7 +361,7 @@ Set these Space secrets in your HF repo:
 
 | Secret | Value |
 |--------|-------|
-| `HF_MODEL_REPO_ID` | `your-username/your-model-repo` |
+| `HF_MODEL_REPO_ID` | `<your-username>/<your-model-repo>` |
 | `HF_MODEL_FILENAME` | `Best_SwinDAF-CHAOS.pth` |
 | `ENCODER_NAME` | `swin_tiny_patch4_window7_224` |
 | `GROQ_API_KEY` | your Groq key |
