@@ -1,0 +1,21 @@
+{
+  "model": "daf",
+  "model_name": "DAF-baseline",
+  "swin_encoder": null,
+  "epochs": 30,
+  "batch_size": 8,
+  "lr": 0.001,
+  "seed": 42,
+  "amp_bf16": true,
+  "checkpoint": "model\\Best_DAF-baseline.pth",
+  "best_epoch": 27,
+  "best_val_dice_2d_mean": 0.9070544838905334,
+  "best_val_dice_3d_per_organ": [
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "best_val_dice_3d_mean": 0.0,
+  "date_utc": "20260704T052645Z"
+}

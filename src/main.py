@@ -1,5 +1,8 @@
+import json
 import os
+import random
 import numpy as np
+from datetime import datetime, timezone
 
 import torch
 import torch.nn as nn
@@ -32,10 +35,19 @@ def weights_init(m):
         m.weight.data.normal_(1.0, 0.02)
         m.bias.data.fill_(0)
 
+
+def set_seed(seed):
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
+
 def runTraining(args):
     print('-' * 40)
     print('~~~~~~~~  Starting the training... ~~~~~~')
     print('-' * 40)
+
+    set_seed(args.seed)
 
     batch_size = args.batch_size
     batch_size_val = 1
@@ -45,8 +57,12 @@ def runTraining(args):
     epoch = args.epochs
     root_dir = args.root
     model_dir = 'model'
-    
+
+    use_amp = torch.cuda.is_available() and not args.no_amp
+    scaler = torch.amp.GradScaler('cuda', enabled=use_amp)
+
     print(' Dataset: {} '.format(root_dir))
+    print(' Seed: {}   AMP (bf16): {}'.format(args.seed, use_amp))
 
     img_size = 224  # Swin Transformer input size
     transform = transforms.Compose([
@@ -158,83 +174,84 @@ def runTraining(args):
             ################### Train ###################
             net.zero_grad()
 
-            # Network outputs
-            semVector_1_1, \
-            semVector_2_1, \
-            semVector_1_2, \
-            semVector_2_2, \
-            semVector_1_3, \
-            semVector_2_3, \
-            semVector_1_4, \
-            semVector_2_4, \
-            inp_enc0, \
-            inp_enc1, \
-            inp_enc2, \
-            inp_enc3, \
-            inp_enc4, \
-            inp_enc5, \
-            inp_enc6, \
-            inp_enc7, \
-            out_enc0, \
-            out_enc1, \
-            out_enc2, \
-            out_enc3, \
-            out_enc4, \
-            out_enc5, \
-            out_enc6, \
-            out_enc7, \
-            outputs0, \
-            outputs1, \
-            outputs2, \
-            outputs3, \
-            outputs0_2, \
-            outputs1_2, \
-            outputs2_2, \
-            outputs3_2 = net(MRI)
+            with torch.amp.autocast('cuda', dtype=torch.bfloat16, enabled=use_amp):
+                # Network outputs
+                semVector_1_1, \
+                semVector_2_1, \
+                semVector_1_2, \
+                semVector_2_2, \
+                semVector_1_3, \
+                semVector_2_3, \
+                semVector_1_4, \
+                semVector_2_4, \
+                inp_enc0, \
+                inp_enc1, \
+                inp_enc2, \
+                inp_enc3, \
+                inp_enc4, \
+                inp_enc5, \
+                inp_enc6, \
+                inp_enc7, \
+                out_enc0, \
+                out_enc1, \
+                out_enc2, \
+                out_enc3, \
+                out_enc4, \
+                out_enc5, \
+                out_enc6, \
+                out_enc7, \
+                outputs0, \
+                outputs1, \
+                outputs2, \
+                outputs3, \
+                outputs0_2, \
+                outputs1_2, \
+                outputs2_2, \
+                outputs3_2 = net(MRI)
 
-            segmentation_prediction = (
-                outputs0 + outputs1 + outputs2 + outputs3 +\
-                outputs0_2 + outputs1_2 + outputs2_2 + outputs3_2
-                ) / 8
-            predClass_y = softMax(segmentation_prediction)
+                segmentation_prediction = (
+                    outputs0 + outputs1 + outputs2 + outputs3 +\
+                    outputs0_2 + outputs1_2 + outputs2_2 + outputs3_2
+                    ) / 8
+                predClass_y = softMax(segmentation_prediction)
 
-            Segmentation_planes = getOneHotSegmentation(Segmentation)
+                Segmentation_planes = getOneHotSegmentation(Segmentation)
 
-            segmentation_prediction_ones = predToSegmentation(predClass_y)
+                segmentation_prediction_ones = predToSegmentation(predClass_y)
 
-            # It needs the logits, not the softmax
-            Segmentation_class = getTargetSegmentation(Segmentation)
+                # It needs the logits, not the softmax
+                Segmentation_class = getTargetSegmentation(Segmentation)
 
-            # Cross-entropy loss
-            loss0 = CE_loss(outputs0, Segmentation_class)
-            loss1 = CE_loss(outputs1, Segmentation_class)
-            loss2 = CE_loss(outputs2, Segmentation_class)
-            loss3 = CE_loss(outputs3, Segmentation_class)
-            loss0_2 = CE_loss(outputs0_2, Segmentation_class)
-            loss1_2 = CE_loss(outputs1_2, Segmentation_class)
-            loss2_2 = CE_loss(outputs2_2, Segmentation_class)
-            loss3_2 = CE_loss(outputs3_2, Segmentation_class)
+                # Cross-entropy loss
+                loss0 = CE_loss(outputs0, Segmentation_class)
+                loss1 = CE_loss(outputs1, Segmentation_class)
+                loss2 = CE_loss(outputs2, Segmentation_class)
+                loss3 = CE_loss(outputs3, Segmentation_class)
+                loss0_2 = CE_loss(outputs0_2, Segmentation_class)
+                loss1_2 = CE_loss(outputs1_2, Segmentation_class)
+                loss2_2 = CE_loss(outputs2_2, Segmentation_class)
+                loss3_2 = CE_loss(outputs3_2, Segmentation_class)
 
-            lossSemantic1 = mseLoss(semVector_1_1, semVector_2_1)
-            lossSemantic2 = mseLoss(semVector_1_2, semVector_2_2)
-            lossSemantic3 = mseLoss(semVector_1_3, semVector_2_3)
-            lossSemantic4 = mseLoss(semVector_1_4, semVector_2_4)
+                lossSemantic1 = mseLoss(semVector_1_1, semVector_2_1)
+                lossSemantic2 = mseLoss(semVector_1_2, semVector_2_2)
+                lossSemantic3 = mseLoss(semVector_1_3, semVector_2_3)
+                lossSemantic4 = mseLoss(semVector_1_4, semVector_2_4)
 
-            lossRec0 = mseLoss(inp_enc0, out_enc0)
-            lossRec1 = mseLoss(inp_enc1, out_enc1)
-            lossRec2 = mseLoss(inp_enc2, out_enc2)
-            lossRec3 = mseLoss(inp_enc3, out_enc3)
-            lossRec4 = mseLoss(inp_enc4, out_enc4)
-            lossRec5 = mseLoss(inp_enc5, out_enc5)
-            lossRec6 = mseLoss(inp_enc6, out_enc6)
-            lossRec7 = mseLoss(inp_enc7, out_enc7)
+                lossRec0 = mseLoss(inp_enc0, out_enc0)
+                lossRec1 = mseLoss(inp_enc1, out_enc1)
+                lossRec2 = mseLoss(inp_enc2, out_enc2)
+                lossRec3 = mseLoss(inp_enc3, out_enc3)
+                lossRec4 = mseLoss(inp_enc4, out_enc4)
+                lossRec5 = mseLoss(inp_enc5, out_enc5)
+                lossRec6 = mseLoss(inp_enc6, out_enc6)
+                lossRec7 = mseLoss(inp_enc7, out_enc7)
 
-            lossG = (loss0 + loss1 + loss2 + loss3 + loss0_2 + loss1_2 + loss2_2 + loss3_2)\
-                + 0.25 * (lossSemantic1 + lossSemantic2 + lossSemantic3 + lossSemantic4) \
-                + 0.1 * (lossRec0 + lossRec1 + lossRec2 + lossRec3 + lossRec4 + lossRec5 + lossRec6 + lossRec7)  # CE_lossG
+                lossG = (loss0 + loss1 + loss2 + loss3 + loss0_2 + loss1_2 + loss2_2 + loss3_2)\
+                    + 0.25 * (lossSemantic1 + lossSemantic2 + lossSemantic3 + lossSemantic4) \
+                    + 0.1 * (lossRec0 + lossRec1 + lossRec2 + lossRec3 + lossRec4 + lossRec5 + lossRec6 + lossRec7)  # CE_lossG
 
-            # Compute the DSC
-            DicesN, DicesB, DicesW, DicesT, DicesZ = Dice_loss(segmentation_prediction_ones, Segmentation_planes)
+            # Compute the DSC (full precision, outside autocast)
+            DicesN, DicesB, DicesW, DicesT, DicesZ = Dice_loss(segmentation_prediction_ones.float(), Segmentation_planes.float())
 
             DiceB = DicesToDice(DicesB)
             DiceW = DicesToDice(DicesW)
@@ -243,9 +260,10 @@ def runTraining(args):
 
             Dice_score = (DiceB + DiceW + DiceT+ DiceZ) / 4
 
-            lossG.backward()
-            optimizer.step()
-            
+            scaler.scale(lossG).backward()
+            scaler.step(optimizer)
+            scaler.update()
+
             lossVal.append(lossG.cpu().data.numpy())
 
             printProgressBar(j + 1, totalImages,
@@ -342,6 +360,28 @@ def runTraining(args):
                 param_group['lr'] = lr
                 print(' ----------  New learning Rate: {}'.format(lr))
 
+    timestamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    outputs_dir = 'outputs'
+    os.makedirs(outputs_dir, exist_ok=True)
+    run_summary = {
+        "model": args.model,
+        "model_name": args.modelName,
+        "swin_encoder": args.swin_encoder if args.model == 'swin_daf' else None,
+        "epochs": args.epochs,
+        "batch_size": args.batch_size,
+        "lr": args.lr,
+        "seed": args.seed,
+        "amp_bf16": use_amp,
+        "checkpoint": os.path.join(model_dir, "Best_" + modelName + ".pth"),
+        "best_epoch": BestEpoch,
+        "best_val_dice_2d_mean": float(BestDice),
+        "best_val_dice_3d_per_organ": [float(x) for x in BestDice3D],
+        "best_val_dice_3d_mean": float(np.mean(BestDice3D)),
+        "date_utc": timestamp,
+    }
+    with open(os.path.join(outputs_dir, "train_run_{}_{}.json".format(modelName, timestamp)), "w") as f:
+        json.dump(run_summary, f, indent=2)
+
 
 if __name__ == '__main__':
     parser=argparse.ArgumentParser()
@@ -362,5 +402,8 @@ if __name__ == '__main__':
                         help='Swin variant (only used when --model swin_daf)')
     parser.add_argument('--no_pretrain', action='store_true',
                         help='Disable ImageNet pretrained weights for Swin encoder')
+    parser.add_argument('--seed', default=42, type=int, help='Random seed for torch/numpy/random')
+    parser.add_argument('--no_amp', action='store_true',
+                        help='Disable bf16 autocast + GradScaler (AMP is on by default when CUDA is available)')
     args=parser.parse_args()
     runTraining(args)

@@ -1,0 +1,54 @@
+{
+  "checkpoint": "model\\Best_SwinDAF-CHAOS.pth",
+  "model": "swin_daf",
+  "swin_encoder": "swin_tiny_patch4_window7_224",
+  "split": "test",
+  "dataset_root": "DataSet",
+  "num_slices": 62,
+  "num_subjects_3d": 2,
+  "seed": 42,
+  "date_utc": "20260704T052900Z",
+  "device": "cuda",
+  "dice_2d_per_organ": {
+    "Liver": {
+      "mean": 0.6535190162760164,
+      "std": 0.4453562370395377
+    },
+    "Right Kidney": {
+      "mean": 0.8707080377680847,
+      "std": 0.292128992506729
+    },
+    "Left Kidney": {
+      "mean": 0.807922869543832,
+      "std": 0.35016530564414533
+    },
+    "Spleen": {
+      "mean": 0.756526723653327,
+      "std": 0.3974814900091253
+    }
+  },
+  "mean_dice_2d": 0.772169161810315,
+  "dice_3d_per_organ": {
+    "Liver": {
+      "mean": 0.4716572914964681,
+      "std": 0.462593706241146,
+      "n_subjects": 2
+    },
+    "Right Kidney": {
+      "mean": 0.9057821044037064,
+      "std": 0.03900040630172513,
+      "n_subjects": 2
+    },
+    "Left Kidney": {
+      "mean": 0.8640735551888983,
+      "std": 0.002310025844364294,
+      "n_subjects": 2
+    },
+    "Spleen": {
+      "mean": 0.40361637725027877,
+      "std": 0.40361637725027877,
+      "n_subjects": 2
+    }
+  },
+  "mean_dice_3d": 0.6612823320848378
+}
