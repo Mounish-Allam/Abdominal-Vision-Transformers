@@ -74,6 +74,7 @@ desktop.ini
 
 # ── Claude Code ───────────────────────────────────────────────────────────────
 .claude/
+CLAUDE.md
 
 # ── Build / Distribution ──────────────────────────────────────────────────────
 dist/
@@ -95,6 +96,13 @@ htmlcov/
 tmp/
 temp/
 
+# ── RAG knowledge-base index ──────────────────────────────────────────────────
+# Small, built only from committed knowledge_base/ files (never user input) —
+# must be tracked so the eventual HF Space can load it without rebuilding.
+# Overrides the blanket *.pkl rule above for this directory only.
+!rag/kb_index/
+!rag/kb_index/*.pkl
+
 # ─────────────────────────────────────────────────────────────────────────────
 # NOTE: The following are intentionally TRACKED (not ignored):
 #   demo_results/   — screenshots used in README.md
@@ -102,5 +110,6 @@ temp/
 #   DataSetSample/  — small sample dataset for quick testing
 #   model/          — folder is tracked; .pth files inside are ignored above
 #   requirements.txt, README.md, app.py, src/ — core project files
+#   rag/kb_index/   — FAISS index built from committed knowledge_base/ files
 # ─────────────────────────────────────────────────────────────────────────────
 *.pth

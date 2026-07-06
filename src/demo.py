@@ -23,7 +23,12 @@ import gradio as gr
 
 sys.path.insert(0, os.path.dirname(__file__))
 from models.swin_danet import SwinDAF
-from report_generator import generate_report, ORGAN_NAMES
+from report_generator import (
+    generate_report,
+    ORGAN_NAMES,
+    CONFIDENCE_THRESHOLD,
+    ENTROPY_THRESHOLD,
+)
 
 # ── Constants ─────────────────────────────────────────────────────────────────
 ORGAN_COLORS_NORM = {
@@ -253,12 +258,37 @@ def make_pixel_donut(stats: dict) -> Image.Image:
     return fig_to_pil(fig)
 
 
-def compute_stats(mask: np.ndarray) -> dict:
+def compute_stats(mask: np.ndarray, probs: np.ndarray | None = None) -> dict:
     total = mask.size
     stats = {"total": total}
+
+    confidence_map = probs.max(axis=0) if probs is not None else None
+    entropy_map = (
+        -(probs * np.log(probs + 1e-8)).sum(axis=0) if probs is not None else None
+    )
+
     for i in range(5):
-        count = int((mask == i).sum())
-        stats[i] = {"pixels": count, "pct": count / total * 100}
+        organ_mask = mask == i
+        count = int(organ_mask.sum())
+        entry = {"pixels": count, "pct": count / total * 100}
+
+        if probs is not None:
+            if count > 0:
+                mean_confidence = float(confidence_map[organ_mask].mean())
+                mean_entropy = float(entropy_map[organ_mask].mean())
+                low_confidence = (
+                    mean_confidence < CONFIDENCE_THRESHOLD
+                    or mean_entropy > ENTROPY_THRESHOLD
+                )
+            else:
+                mean_confidence = None
+                mean_entropy = None
+                low_confidence = True
+            entry["mean_confidence"] = mean_confidence
+            entry["mean_entropy"] = mean_entropy
+            entry["low_confidence"] = low_confidence
+
+        stats[i] = entry
     return stats
 
 
@@ -270,9 +300,9 @@ def stats_to_markdown(stats: dict) -> str:
     return "| Organ | Pixels | Coverage |\n|-------|--------|----------|\n" + rows
 
 # ── Main analysis function ────────────────────────────────────────────────────
-def run_analysis(image, weights_path, encoder_name, api_key):
+def run_analysis(image, weights_path, encoder_name, api_key, use_rag):
     if image is None:
-        return (None,) * 8 + ("Upload an MRI image first.", "")
+        return (None,) * 8 + ("Upload an MRI image first.", "", "")
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     key = (weights_path.strip(), encoder_name)
@@ -281,7 +311,7 @@ def run_analysis(image, weights_path, encoder_name, api_key):
             _cache.clear()
             _cache[key] = load_model(weights_path.strip(), encoder_name, device)
         except Exception as e:
-            return (None,) * 8 + (f"**Model error:** {e}", "")
+            return (None,) * 8 + (f"**Model error:** {e}", "", "")
 
     model  = _cache[key]
     pil    = Image.fromarray(image) if isinstance(image, np.ndarray) else image
@@ -294,16 +324,16 @@ def run_analysis(image, weights_path, encoder_name, api_key):
     entropy    = make_entropy_map(probs)
     prob_maps  = make_probability_maps(probs)
     prob_hist  = make_prob_histograms(probs)
-    stats      = compute_stats(mask)
+    stats      = compute_stats(mask, probs)
     bar_chart  = make_bar_chart(stats)
     donut      = make_pixel_donut(stats)
     stats_md   = stats_to_markdown(stats)
-    report     = generate_report(stats, api_key=api_key)
+    report, passages_md = generate_report(stats, api_key=api_key, use_rag=use_rag)
 
-    return overlay, boundary, conf_map, entropy, prob_maps, prob_hist, bar_chart, donut, stats_md, report
+    return overlay, boundary, conf_map, entropy, prob_maps, prob_hist, bar_chart, donut, stats_md, report, passages_md
 
 # ── UI ────────────────────────────────────────────────────────────────────────
-def build_ui(default_weights="", default_encoder="swin_tiny_patch4_window7_224"):
+def build_ui(default_weights="", default_encoder="swin_tiny_patch4_window7_224", default_use_rag=True):
     with gr.Blocks(title="MRI Segmentation — SwinDAF") as demo:
         gr.Markdown(DESCRIPTION)
 
@@ -335,6 +365,11 @@ def build_ui(default_weights="", default_encoder="swin_tiny_patch4_window7_224")
                         type="password",
                         info="Free key at console.groq.com or set GROQ_API_KEY env var",
                     )
+                    use_rag_in = gr.Checkbox(
+                        value=default_use_rag,
+                        label="Use RAG grounding",
+                        info="Ground the report in retrieved reference passages (recommended)",
+                    )
 
                 run_btn = gr.Button("▶  Analyse", variant="primary", size="lg")
 
@@ -363,22 +398,25 @@ def build_ui(default_weights="", default_encoder="swin_tiny_patch4_window7_224")
 
                 stats_out  = gr.Markdown(label="Organ Statistics")
                 report_out = gr.Textbox(label="Clinical Report (Groq LLM)", lines=7, interactive=False)
+                with gr.Accordion("Retrieved passages (grounding)", open=False):
+                    passages_out = gr.Markdown(label="Retrieved Passages")
 
         gr.Markdown(
             "---\n"
             "**Legend** — 🔴 Liver · 🟢 Right Kidney · 🔵 Left Kidney · 🟡 Spleen  \n"
-            "*SwinDAF · PyTorch · timm · Gradio · Groq Llama 3.3 70B*"
+            "*SwinDAF · PyTorch · timm · Gradio · Groq Llama 3.3 70B*\n\n"
+            "⚠️ **Research and education demo. Not a medical device. Not for diagnostic use.**"
         )
 
         run_btn.click(
             fn=run_analysis,
-            inputs=[image_in, weights_in, encoder_dd, api_key_in],
+            inputs=[image_in, weights_in, encoder_dd, api_key_in, use_rag_in],
             outputs=[
                 overlay_out, boundary_out,
                 conf_out, entropy_out,
                 prob_out, prob_hist_out,
                 bar_out, donut_out,
-                stats_out, report_out,
+                stats_out, report_out, passages_out,
             ],
         )
 
@@ -391,8 +429,12 @@ if __name__ == "__main__":
     parser.add_argument("--port",    type=int, default=7860)
     parser.add_argument("--weights", default="")
     parser.add_argument("--encoder", default="swin_tiny_patch4_window7_224")
+    parser.add_argument("--no_rag", action="store_true",
+                         help="Disable RAG grounding by default (still toggleable in the UI)")
     args = parser.parse_args()
 
-    build_ui(default_weights=args.weights, default_encoder=args.encoder).launch(
-        share=args.share, server_port=args.port, theme=gr.themes.Soft()
-    )
+    build_ui(
+        default_weights=args.weights,
+        default_encoder=args.encoder,
+        default_use_rag=not args.no_rag,
+    ).launch(share=args.share, server_port=args.port, theme=gr.themes.Soft())
