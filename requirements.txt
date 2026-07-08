@@ -9,6 +9,7 @@ timm>=0.9.0
 torch>=1.13.0
 torchvision>=0.14.0
 gradio>=4.0.0
+audioop-lts; python_version >= "3.13"
 huggingface_hub>=0.20.0
 kagglehub>=0.3.0
 pydicom>=2.4.0
