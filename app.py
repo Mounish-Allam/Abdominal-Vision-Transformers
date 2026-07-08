@@ -40,7 +40,5 @@ else:
     print("[app] HF_MODEL_REPO_ID not set — running in random-weight demo mode.")
 
 # ── Launch Gradio app ─────────────────────────────────────────────────────────
-import gradio as gr
-
 app = build_ui(default_weights=weights_path, default_encoder=ENCODER)
-app.launch(theme=gr.themes.Soft())
+app.launch()
