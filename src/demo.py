@@ -336,7 +336,7 @@ def run_analysis(image, weights_path, encoder_name, api_key, use_rag):
 
 # ── UI ────────────────────────────────────────────────────────────────────────
 def build_ui(default_weights="", default_encoder="swin_tiny_patch4_window7_224", default_use_rag=True):
-    with gr.Blocks(title="MRI Segmentation — SwinDAF") as demo:
+    with gr.Blocks(title="MRI Segmentation — SwinDAF", theme=gr.themes.Soft()) as demo:
         gr.Markdown(DESCRIPTION)
 
         with gr.Row():
@@ -447,4 +447,4 @@ if __name__ == "__main__":
         default_weights=args.weights,
         default_encoder=args.encoder,
         default_use_rag=not args.no_rag,
-    ).launch(share=args.share, server_port=args.port, theme=gr.themes.Soft())
+    ).launch(share=args.share, server_port=args.port)
