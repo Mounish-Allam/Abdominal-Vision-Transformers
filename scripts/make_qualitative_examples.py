@@ -117,10 +117,21 @@ def main() -> None:
     out_dir = REPO_ROOT / args.out_dir
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    slice_records.sort(key=lambda r: r[3])
-    worst = slice_records[0]
-    best = slice_records[-1]
-    median = slice_records[len(slice_records) // 2]
+    # Exclude slices with no organs at all in the ground truth from best/median/worst
+    # selection -- an empty-GT slice trivially scores a "perfect" Dice by predicting
+    # nothing, which is a real but misleading artifact of the metric, not a genuine
+    # demonstration of the model working.
+    n_total = len(slice_records)
+    non_trivial = [r for r in slice_records if (r[7] > 0).any()]
+    n_excluded = n_total - len(non_trivial)
+    if n_excluded:
+        print(f"\nExcluded {n_excluded}/{n_total} slices with an empty ground truth "
+              f"(no organs present) from best/median/worst selection.")
+
+    non_trivial.sort(key=lambda r: r[3])
+    worst = non_trivial[0]
+    best = non_trivial[-1]
+    median = non_trivial[len(non_trivial) // 2]
 
     for tag, rec in [("worst", worst), ("median", median), ("best", best)]:
         subj_id, slice_num, img_path, mean_dice, organ_dice, gray, pred_mask, gt_mask = rec
