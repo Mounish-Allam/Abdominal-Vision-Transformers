@@ -21,6 +21,15 @@ license: mit
 
 > ⚠️ **Research and education demo. Not a medical device. Not for diagnostic use.**
 
+| | |
+|---|---|
+| **Live demo** | Not yet deployed — see [Deployment on Hugging Face Spaces](#deployment-on-hugging-face-spaces) |
+| **Trained weights** | [`MounishAllam/swin-daf-chaos-mri`](https://huggingface.co/MounishAllam/swin-daf-chaos-mri) on HF Hub |
+| **Dataset** | [CHAOS](https://chaos.grand-challenge.org/) T2-SPIR MRI, 20 subjects, subject-level 16/2/2 split |
+| **Cost** | **$0** — free-tier Groq LLM, local sentence-transformers embeddings, local RTX 5080 training |
+| **Test-set result** | SwinDAF 0.762 mean Dice (2D) vs. 0.702 DAF baseline — see [Results](#results) for the full breakdown, including a disclosed failure case |
+| **RAG grounding** | Cuts unsupported-claim rate 1.3% → 0.6%, raises uncertainty-flagging 28% → 100% — see [Report grounding evaluation](#report-grounding-evaluation-rag-beforeafter) |
+
 ---
 
 ## Pipeline
@@ -509,6 +518,14 @@ python rag/tally_scores.py
 
 ## Deployment on Hugging Face Spaces
 
+`app.py` is the Space entry point: on cold start it downloads the checkpoint from the HF
+model repo via Space secrets, loads the committed `rag/kb_index/` FAISS index, and serves the
+full Gradio dashboard (segmentation, confidence/uncertainty, RAG-grounded report). Five
+bundled example slices from the held-out test split (`examples/`) let visitors try it with
+zero setup — one is deliberately the disclosed worst-case failure slice, not just the best
+one. CPU inference for a single 224×224 slice measured ~0.18s locally, well within the free
+CPU tier's tolerance — no precomputation fallback needed.
+
 Set these Space secrets in your HF repo:
 
 | Secret | Value |
@@ -518,13 +535,30 @@ Set these Space secrets in your HF repo:
 | `ENCODER_NAME` | `swin_tiny_patch4_window7_224` |
 | `GROQ_API_KEY` | your Groq key |
 
-Upload your trained checkpoint:
+Upload your trained checkpoint and model card:
 
 ```bash
-python upload_weights.py
+python upload_weights.py --weights model/Best_SwinDAF-CHAOS.pth --repo <your-username>/<your-model-repo>
 ```
 
 ---
+
+## Limitations
+
+- **Not a medical device, not for diagnostic use** — see the disclaimer at the top of this
+  README and in the app's footer. Outputs are for research/education only.
+- **Small test set (2 subjects, 62 slices)**, a deliberate consequence of never splitting
+  CHAOS at the slice level (see `CLAUDE.md`). This makes the aggregate mean sensitive to a
+  single atypical subject — see [Failure analysis](#results) for the real, disclosed case.
+- **The LLM-generated clinical report is decision-support text, not a medical finding.**
+  Even with RAG grounding, it can still state details not supported by the measurements or
+  retrieved passages (measured unsupported-claim rate: 0.6% with RAG, 1.3% without) — see
+  [Report grounding evaluation](#report-grounding-evaluation-rag-beforeafter) for the honest
+  numbers and named examples of both a case where grounding helped and one where it didn't.
+- **Trained on a single public dataset (CHAOS, 20 subjects total).** Generalization to other
+  scanners, protocols, or patient populations is untested.
+- **RAG evaluation scoring is AI-assisted, not independent human clinical review** — see the
+  methodology caveat in the evaluation section for what that does and doesn't validate.
 
 ## References
 

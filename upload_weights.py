@@ -1,9 +1,9 @@
 """
-Upload your trained .pth checkpoint to a Hugging Face Model Hub repository.
+Upload your trained .pth checkpoint and model card to a Hugging Face Model Hub repository.
 
 Usage:
     python upload_weights.py \
-        --weights model/Best_MS-Dual-Guided.pth \
+        --weights model/Best_SwinDAF-CHAOS.pth \
         --repo    your-username/swin-daf-chaos-mri
 
 You must be logged in first:
@@ -11,7 +11,12 @@ You must be logged in first:
 """
 
 import argparse
+from pathlib import Path
+
 from huggingface_hub import HfApi, create_repo
+
+REPO_ROOT = Path(__file__).resolve().parent
+MODEL_CARD_PATH = REPO_ROOT / "model_card.md"
 
 
 def upload(weights_path: str, repo_id: str, private: bool = False) -> None:
@@ -28,9 +33,22 @@ def upload(weights_path: str, repo_id: str, private: bool = False) -> None:
         repo_id=repo_id,
         repo_type="model",
     )
-    print(f"\nDone!  File available at: {url}")
+    print(f"Weights uploaded: {url}")
+
+    if MODEL_CARD_PATH.is_file():
+        print(f"Uploading model card '{MODEL_CARD_PATH}' as 'README.md' ...")
+        card_url = api.upload_file(
+            path_or_fileobj=str(MODEL_CARD_PATH),
+            path_in_repo="README.md",
+            repo_id=repo_id,
+            repo_type="model",
+        )
+        print(f"Model card uploaded: {card_url}")
+    else:
+        print(f"WARNING: no model card found at {MODEL_CARD_PATH}, skipping.")
+
     print(
-        f"\nNow set this as a Space environment variable:\n"
+        f"\nDone! Now set this as a Space environment variable:\n"
         f"  HF_MODEL_REPO_ID  = {repo_id}\n"
         f"  HF_MODEL_FILENAME = {filename}\n"
     )

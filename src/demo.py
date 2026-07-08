@@ -9,7 +9,7 @@ Run:
     python src/demo.py --weights model/Best_SwinDAF-CHAOS.pth --share
 """
 
-import sys, os, io, argparse
+import sys, os, io, argparse, glob
 import numpy as np
 from PIL import Image
 import matplotlib
@@ -50,6 +50,8 @@ BOUNDARY_COLORS = {
     3: (60,  120, 255),
     4: (255, 210, 0),
 }
+
+EXAMPLES_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "examples")
 
 DESCRIPTION = """
 # 🏥 Abdominal MRI Organ Segmentation
@@ -341,6 +343,14 @@ def build_ui(default_weights="", default_encoder="swin_tiny_patch4_window7_224",
             # ── Inputs ───────────────────────────────────────────────────────
             with gr.Column(scale=1, min_width=280):
                 image_in = gr.Image(label="Upload MRI Slice", type="pil", height=260)
+
+                example_files = sorted(glob.glob(os.path.join(EXAMPLES_DIR, "*.png")))
+                if example_files:
+                    gr.Examples(
+                        examples=[[f] for f in example_files],
+                        inputs=[image_in],
+                        label="Try a bundled test-set slice (no upload needed)",
+                    )
 
                 with gr.Accordion("Model", open=True):
                     encoder_dd = gr.Dropdown(
