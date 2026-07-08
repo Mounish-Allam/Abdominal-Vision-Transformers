@@ -64,3 +64,9 @@ def test_generate_report_falls_back_when_index_missing(monkeypatch):
     assert report == "Canned report text."
     assert "RAG unavailable" in passages_md
     assert "build_index.py" in passages_md
+
+
+def test_prompts_request_findings_and_impression_sections():
+    for system_prompt in (report_generator._GROUNDED_SYSTEM, report_generator._LEGACY_SYSTEM):
+        assert "Findings:" in system_prompt
+        assert "Impression:" in system_prompt

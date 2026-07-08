@@ -1,0 +1,1495 @@
+{
+  "mode": "norag",
+  "seed": 42,
+  "n": 30,
+  "weights": "model/Best_SwinDAF-CHAOS.pth",
+  "encoder": "swin_tiny_patch4_window7_224",
+  "date_utc": "20260707T000559Z",
+  "selected_slice_ids": [
+    "Subj_15slice_10",
+    "Subj_15slice_11",
+    "Subj_15slice_14",
+    "Subj_15slice_15",
+    "Subj_15slice_16",
+    "Subj_15slice_17",
+    "Subj_15slice_20",
+    "Subj_15slice_21",
+    "Subj_15slice_22",
+    "Subj_15slice_23",
+    "Subj_15slice_25",
+    "Subj_1slice_1",
+    "Subj_1slice_10",
+    "Subj_1slice_11",
+    "Subj_1slice_15",
+    "Subj_1slice_17",
+    "Subj_1slice_18",
+    "Subj_1slice_2",
+    "Subj_1slice_20",
+    "Subj_1slice_22",
+    "Subj_1slice_23",
+    "Subj_1slice_25",
+    "Subj_1slice_26",
+    "Subj_1slice_29",
+    "Subj_1slice_3",
+    "Subj_1slice_30",
+    "Subj_1slice_34",
+    "Subj_1slice_36",
+    "Subj_1slice_6",
+    "Subj_1slice_7"
+  ],
+  "subject_counts": {
+    "Subj_1": 19,
+    "Subj_15": 11
+  },
+  "reports": [
+    {
+      "slice_id": "Subj_1slice_22",
+      "image_path": "DataSet\\test\\Img\\Subj_1slice_22.png",
+      "organ_stats": {
+        "total": 50176,
+        "0": {
+          "pixels": 45627,
+          "pct": 90.93391262755102,
+          "mean_confidence": 0.9942350387573242,
+          "mean_entropy": 0.014732477255165577,
+          "low_confidence": false
+        },
+        "1": {
+          "pixels": 2647,
+          "pct": 5.275430484693878,
+          "mean_confidence": 0.948067307472229,
+          "mean_entropy": 0.12626266479492188,
+          "low_confidence": false
+        },
+        "2": {
+          "pixels": 865,
+          "pct": 1.7239317602040818,
+          "mean_confidence": 0.9548439979553223,
+          "mean_entropy": 0.1171669140458107,
+          "low_confidence": false
+        },
+        "3": {
+          "pixels": 626,
+          "pct": 1.2476084183673468,
+          "mean_confidence": 0.9326608777046204,
+          "mean_entropy": 0.17256493866443634,
+          "low_confidence": false
+        },
+        "4": {
+          "pixels": 411,
+          "pct": 0.8191167091836735,
+          "mean_confidence": 0.9052718877792358,
+          "mean_entropy": 0.21580687165260315,
+          "low_confidence": false
+        }
+      },
+      "report_markdown": "## Findings:\nThe 2D abdominal MRI slice demonstrates the presence of the liver, right kidney, left kidney, and spleen. The liver covers approximately 5.3% of the slice, while the right and left kidneys cover 1.7% and 1.2%, respectively. The spleen is identified, covering 0.8% of the slice. Notably, there is an asymmetry between the paired kidneys, with the right kidney being larger than the left kidney by approximately 38%. The background comprises 90.9% of the slice.\n\n## Impression:\nThe abdominal MRI slice shows normal organ presence, with the liver and kidneys appearing in their expected locations. However, the relative size difference between the right and left kidneys is notable and may warrant further evaluation to determine its clinical significance. Overall, the automated segmentation output suggests no overt abnormalities in organ morphology, but the observed kidney asymmetry requires additional investigation.",
+      "passages_markdown": "",
+      "any_organ_flagged": false,
+      "uncertainty_mentioned": false,
+      "structure_ok": true,
+      "reference_usage_ok": null
+    },
+    {
+      "slice_id": "Subj_15slice_16",
+      "image_path": "DataSet\\test\\Img\\Subj_15slice_16.png",
+      "organ_stats": {
+        "total": 50176,
+        "0": {
+          "pixels": 49930,
+          "pct": 99.50972576530613,
+          "mean_confidence": 0.9991970062255859,
+          "mean_entropy": 0.002546398900449276,
+          "low_confidence": false
+        },
+        "1": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        },
+        "2": {
+          "pixels": 161,
+          "pct": 0.3208705357142857,
+          "mean_confidence": 0.7352846264839172,
+          "mean_entropy": 0.61674565076828,
+          "low_confidence": false
+        },
+        "3": {
+          "pixels": 85,
+          "pct": 0.16940369897959184,
+          "mean_confidence": 0.615287721157074,
+          "mean_entropy": 0.8075082302093506,
+          "low_confidence": false
+        },
+        "4": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        }
+      },
+      "report_markdown": "## Findings:\nThe provided 2D abdominal MRI slice segmentation results show the presence of both kidneys, with the right kidney covering 0.3% of the slice (161 px) and the left kidney covering 0.2% of the slice (85 px). The liver and spleen are not visible in this slice. The right kidney is slightly larger than the left, with a higher mean confidence (0.74 vs 0.62) but lower mean entropy (0.62 vs 0.81) in the segmentation output.\n\n## Impression:\nThe clinical impression is that of an asymmetric renal appearance in this single 2D abdominal MRI slice, with the right kidney being larger and having a higher segmentation confidence than the left kidney. The absence of the liver and spleen in this slice may be due to the slice location or other technical factors. Further imaging and clinical correlation would be necessary to fully assess the abdominal anatomy and determine the significance of these findings.",
+      "passages_markdown": "",
+      "any_organ_flagged": true,
+      "uncertainty_mentioned": true,
+      "structure_ok": true,
+      "reference_usage_ok": null
+    },
+    {
+      "slice_id": "Subj_15slice_10",
+      "image_path": "DataSet\\test\\Img\\Subj_15slice_10.png",
+      "organ_stats": {
+        "total": 50176,
+        "0": {
+          "pixels": 48561,
+          "pct": 96.78132971938776,
+          "mean_confidence": 0.9979860782623291,
+          "mean_entropy": 0.005703805014491081,
+          "low_confidence": false
+        },
+        "1": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        },
+        "2": {
+          "pixels": 917,
+          "pct": 1.8275669642857144,
+          "mean_confidence": 0.9621148109436035,
+          "mean_entropy": 0.09796764701604843,
+          "low_confidence": false
+        },
+        "3": {
+          "pixels": 698,
+          "pct": 1.3911033163265305,
+          "mean_confidence": 0.9403494000434875,
+          "mean_entropy": 0.148622065782547,
+          "low_confidence": false
+        },
+        "4": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        }
+      },
+      "report_markdown": "## Findings:\nThe 2D abdominal MRI slice shows the presence of both kidneys, with the right kidney covering 1.8% of the slice (917 px) and the left kidney covering 1.4% of the slice (698 px). The liver and spleen are not visible in this slice. The right kidney is slightly larger than the left, with a higher mean confidence (0.96 vs 0.94) and lower mean entropy (0.10 vs 0.15) in the automated segmentation output.\n\n## Impression:\nThe absence of the liver and spleen in this single 2D slice is notable, suggesting that they may be located outside of the imaged plane. The observed asymmetry between the paired kidneys, with the right kidney being larger, may be a normal anatomical variation or could be indicative of an underlying pathological process. Further imaging and clinical correlation are recommended to fully assess the abdominal anatomy and determine the significance of these findings.",
+      "passages_markdown": "",
+      "any_organ_flagged": true,
+      "uncertainty_mentioned": true,
+      "structure_ok": true,
+      "reference_usage_ok": null
+    },
+    {
+      "slice_id": "Subj_1slice_29",
+      "image_path": "DataSet\\test\\Img\\Subj_1slice_29.png",
+      "organ_stats": {
+        "total": 50176,
+        "0": {
+          "pixels": 42111,
+          "pct": 83.92657844387756,
+          "mean_confidence": 0.9951080083847046,
+          "mean_entropy": 0.012205654755234718,
+          "low_confidence": false
+        },
+        "1": {
+          "pixels": 7102,
+          "pct": 14.15417729591837,
+          "mean_confidence": 0.9801951050758362,
+          "mean_entropy": 0.04778217524290085,
+          "low_confidence": false
+        },
+        "2": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        },
+        "3": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        },
+        "4": {
+          "pixels": 963,
+          "pct": 1.9192442602040818,
+          "mean_confidence": 0.9276142120361328,
+          "mean_entropy": 0.1939024180173874,
+          "low_confidence": false
+        }
+      },
+      "report_markdown": "## Findings:\nThe 2D abdominal MRI slice demonstrates the presence of the liver and spleen, with the liver occupying 14.2% of the slice and the spleen occupying 1.9% of the slice. Notably, neither the right nor left kidney is visible in this slice. The liver and spleen segmentations have high mean confidence levels of 0.98 and 0.93, respectively, but the spleen segmentation has a higher mean entropy of 0.19, indicating slightly lower segmentation certainty.\n\n## Impression:\nThe absence of visible kidneys in this single 2D abdominal MRI slice is unusual, as both kidneys are typically expected to be present in abdominal imaging. The presence and relative size of the liver and spleen are within expected ranges, but the asymmetry in kidney visibility is notable. Further imaging slices or sequences would be necessary to fully assess renal presence and morphology.",
+      "passages_markdown": "",
+      "any_organ_flagged": true,
+      "uncertainty_mentioned": false,
+      "structure_ok": true,
+      "reference_usage_ok": null
+    },
+    {
+      "slice_id": "Subj_15slice_25",
+      "image_path": "DataSet\\test\\Img\\Subj_15slice_25.png",
+      "organ_stats": {
+        "total": 50176,
+        "0": {
+          "pixels": 49875,
+          "pct": 99.40011160714286,
+          "mean_confidence": 0.9990535974502563,
+          "mean_entropy": 0.0027535271365195513,
+          "low_confidence": false
+        },
+        "1": {
+          "pixels": 301,
+          "pct": 0.5998883928571429,
+          "mean_confidence": 0.8803256750106812,
+          "mean_entropy": 0.27891331911087036,
+          "low_confidence": false
+        },
+        "2": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        },
+        "3": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        },
+        "4": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        }
+      },
+      "report_markdown": "## Findings:\nThe provided 2D abdominal MRI slice segmentation results show a small area of the liver (301 px, 0.6% of the slice) with a mean confidence of 0.88 and mean entropy of 0.28. Notably, the right kidney, left kidney, and spleen are not detected in this slice, with 99.4% of the slice classified as background.\n\n## Impression:\nThe liver is partially visualized but covers a significantly smaller area than typically expected, suggesting that the slice may be too anterior or posterior to include the bulk of the liver and other abdominal organs. The absence of the kidneys and spleen in this slice is unusual and may indicate that the slice is not representative of the typical abdominal anatomy, or there may be an issue with the segmentation algorithm or image acquisition. Further imaging or slices are necessary for a comprehensive evaluation.",
+      "passages_markdown": "",
+      "any_organ_flagged": true,
+      "uncertainty_mentioned": false,
+      "structure_ok": true,
+      "reference_usage_ok": null
+    },
+    {
+      "slice_id": "Subj_15slice_23",
+      "image_path": "DataSet\\test\\Img\\Subj_15slice_23.png",
+      "organ_stats": {
+        "total": 50176,
+        "0": {
+          "pixels": 49997,
+          "pct": 99.64325573979592,
+          "mean_confidence": 0.9981586933135986,
+          "mean_entropy": 0.004705950617790222,
+          "low_confidence": false
+        },
+        "1": {
+          "pixels": 179,
+          "pct": 0.3567442602040816,
+          "mean_confidence": 0.6523116827011108,
+          "mean_entropy": 0.6318143010139465,
+          "low_confidence": false
+        },
+        "2": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        },
+        "3": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        },
+        "4": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        }
+      },
+      "report_markdown": "## Findings:\nThe provided 2D abdominal MRI slice shows a small area of the liver (179 px, 0.4% of the slice) with a mean confidence of 0.65 and mean entropy of 0.63. The right and left kidneys, as well as the spleen, are not visible in this slice. The background comprises the majority of the slice (99.6%).\n\n## Impression:\nThe liver is partially visualized but covers a significantly smaller area than typically expected, suggesting that the slice may be too anterior or posterior to capture the full extent of the abdominal organs. The absence of the kidneys and spleen in this slice is notable and may indicate that they are located outside of the current slice plane. Further imaging in additional planes would be necessary to fully evaluate the abdominal organs and assess for any potential asymmetries or abnormalities.",
+      "passages_markdown": "",
+      "any_organ_flagged": true,
+      "uncertainty_mentioned": false,
+      "structure_ok": true,
+      "reference_usage_ok": null
+    },
+    {
+      "slice_id": "Subj_15slice_22",
+      "image_path": "DataSet\\test\\Img\\Subj_15slice_22.png",
+      "organ_stats": {
+        "total": 50176,
+        "0": {
+          "pixels": 50176,
+          "pct": 100.0,
+          "mean_confidence": 0.9998767375946045,
+          "mean_entropy": 0.0008690138929523528,
+          "low_confidence": false
+        },
+        "1": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        },
+        "2": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        },
+        "3": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        },
+        "4": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        }
+      },
+      "report_markdown": "## Findings:\nThe provided 2D abdominal MRI slice shows an absence of the liver, right kidney, left kidney, and spleen, with 0 pixels allocated to each of these organs. The entire slice is comprised of background, covering 100.0% of the area, totaling 50,176 pixels. There is a notable absence of abdominal organs in the slice, suggesting that the slice may be too superior or inferior to include these structures.\n\n## Impression:\nThe clinical impression is that the MRI slice does not include the typical abdominal organs, which may indicate that the slice is not representative of the standard anatomical region. Further imaging or adjustment of the slice position may be necessary to evaluate the abdominal organs. The absence of any notable asymmetries between paired structures is due to their complete absence from the slice.",
+      "passages_markdown": "",
+      "any_organ_flagged": true,
+      "uncertainty_mentioned": false,
+      "structure_ok": true,
+      "reference_usage_ok": null
+    },
+    {
+      "slice_id": "Subj_15slice_17",
+      "image_path": "DataSet\\test\\Img\\Subj_15slice_17.png",
+      "organ_stats": {
+        "total": 50176,
+        "0": {
+          "pixels": 50176,
+          "pct": 100.0,
+          "mean_confidence": 0.9999576210975647,
+          "mean_entropy": 0.00037644500844180584,
+          "low_confidence": false
+        },
+        "1": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        },
+        "2": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        },
+        "3": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        },
+        "4": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        }
+      },
+      "report_markdown": "## Findings:\nThe provided 2D abdominal MRI slice shows an absence of segmented liver, right kidney, left kidney, and spleen, with 0 pixels allocated to each of these organs. The entire slice is comprised of background, covering 100.0% of the area, totaling 50,176 pixels. There is no visible representation of the major abdominal organs in this slice.\n\n## Impression:\nThe clinical impression is that the provided MRI slice does not capture any of the major abdominal organs, including the liver, kidneys, or spleen, suggesting that the slice may be too superior or inferior to include these structures, or there may be an issue with the imaging or segmentation protocol. Further evaluation with additional slices or imaging sequences is recommended to fully assess abdominal anatomy.",
+      "passages_markdown": "",
+      "any_organ_flagged": true,
+      "uncertainty_mentioned": false,
+      "structure_ok": true,
+      "reference_usage_ok": null
+    },
+    {
+      "slice_id": "Subj_1slice_6",
+      "image_path": "DataSet\\test\\Img\\Subj_1slice_6.png",
+      "organ_stats": {
+        "total": 50176,
+        "0": {
+          "pixels": 50176,
+          "pct": 100.0,
+          "mean_confidence": 0.9999881386756897,
+          "mean_entropy": 0.00013761701120529324,
+          "low_confidence": false
+        },
+        "1": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        },
+        "2": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        },
+        "3": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        },
+        "4": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        }
+      },
+      "report_markdown": "## Findings:\nThe provided 2D abdominal MRI slice shows an absence of segmented liver, right kidney, left kidney, and spleen, with 0 pixels allocated to each of these organs. The entire slice is comprised of background, covering 100.0% of the area, totaling 50,176 pixels. Notably, there is a complete lack of identifiable abdominal organs in the segmented output.\n\n## Impression:\nThe clinical impression is that the provided MRI slice does not capture any of the major abdominal organs, including the liver, kidneys, or spleen, suggesting that the slice may be too superior or inferior to include these structures, or there may be an issue with the imaging or segmentation protocol. Further evaluation with additional slices or imaging sequences is recommended to fully assess abdominal anatomy.",
+      "passages_markdown": "",
+      "any_organ_flagged": true,
+      "uncertainty_mentioned": false,
+      "structure_ok": true,
+      "reference_usage_ok": null
+    },
+    {
+      "slice_id": "Subj_15slice_15",
+      "image_path": "DataSet\\test\\Img\\Subj_15slice_15.png",
+      "organ_stats": {
+        "total": 50176,
+        "0": {
+          "pixels": 49591,
+          "pct": 98.83410395408163,
+          "mean_confidence": 0.9976755976676941,
+          "mean_entropy": 0.0071522886864840984,
+          "low_confidence": false
+        },
+        "1": {
+          "pixels": 3,
+          "pct": 0.005978954081632653,
+          "mean_confidence": 0.3557600975036621,
+          "mean_entropy": 1.2339963912963867,
+          "low_confidence": true
+        },
+        "2": {
+          "pixels": 96,
+          "pct": 0.1913265306122449,
+          "mean_confidence": 0.634834885597229,
+          "mean_entropy": 0.93001389503479,
+          "low_confidence": false
+        },
+        "3": {
+          "pixels": 486,
+          "pct": 0.9685905612244898,
+          "mean_confidence": 0.7722896337509155,
+          "mean_entropy": 0.5536075830459595,
+          "low_confidence": false
+        },
+        "4": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        }
+      },
+      "report_markdown": "## Findings:\nThe automated segmentation of a single 2D abdominal MRI slice reveals the presence of both kidneys, with the left kidney covering approximately 1.0% of the slice and the right kidney covering 0.2%. The liver is barely detected, covering 0.0% of the slice with low confidence. The spleen is not detected. There is a notable asymmetry between the paired kidneys, with the left kidney being significantly larger in terms of pixel coverage.\n\n## Impression:\nThe clinical impression is that of an abdominal MRI slice with an apparent absence of the spleen and a significantly smaller right kidney compared to the left, suggesting potential renal asymmetry or pathology. The low confidence and high entropy associated with the liver detection suggest the need for human review to confirm or rule out liver pathology. Further evaluation of adjacent slices and correlation with clinical history is recommended.",
+      "passages_markdown": "",
+      "any_organ_flagged": true,
+      "uncertainty_mentioned": true,
+      "structure_ok": true,
+      "reference_usage_ok": null
+    },
+    {
+      "slice_id": "Subj_1slice_25",
+      "image_path": "DataSet\\test\\Img\\Subj_1slice_25.png",
+      "organ_stats": {
+        "total": 50176,
+        "0": {
+          "pixels": 42758,
+          "pct": 85.21603954081633,
+          "mean_confidence": 0.9910953044891357,
+          "mean_entropy": 0.021849483251571655,
+          "low_confidence": false
+        },
+        "1": {
+          "pixels": 5514,
+          "pct": 10.989317602040815,
+          "mean_confidence": 0.9555908441543579,
+          "mean_entropy": 0.10709618777036667,
+          "low_confidence": false
+        },
+        "2": {
+          "pixels": 435,
+          "pct": 0.8669483418367346,
+          "mean_confidence": 0.9310495257377625,
+          "mean_entropy": 0.17716780304908752,
+          "low_confidence": false
+        },
+        "3": {
+          "pixels": 843,
+          "pct": 1.6800860969387754,
+          "mean_confidence": 0.95843505859375,
+          "mean_entropy": 0.10618654638528824,
+          "low_confidence": false
+        },
+        "4": {
+          "pixels": 626,
+          "pct": 1.2476084183673468,
+          "mean_confidence": 0.9187982678413391,
+          "mean_entropy": 0.19195261597633362,
+          "low_confidence": false
+        }
+      },
+      "report_markdown": "## Findings:\nThe 2D abdominal MRI slice demonstrates the presence of the liver, right kidney, left kidney, and spleen. The liver comprises 11.0% of the slice, while the right and left kidneys account for 0.9% and 1.7%, respectively. The spleen covers 1.2% of the slice. Notable asymmetry is observed between the paired kidneys, with the left kidney being approximately 1.9 times larger than the right kidney in terms of pixel area.\n\n## Impression:\nThe abdominal MRI slice shows normal presence of major organs, with the liver covering a relatively typical proportion of the slice. However, the significant size discrepancy between the left and right kidneys warrants further evaluation to determine the cause of this asymmetry, which could be indicative of an underlying renal pathology or anatomical variation.",
+      "passages_markdown": "",
+      "any_organ_flagged": false,
+      "uncertainty_mentioned": false,
+      "structure_ok": true,
+      "reference_usage_ok": null
+    },
+    {
+      "slice_id": "Subj_1slice_34",
+      "image_path": "DataSet\\test\\Img\\Subj_1slice_34.png",
+      "organ_stats": {
+        "total": 50176,
+        "0": {
+          "pixels": 47916,
+          "pct": 95.49585459183673,
+          "mean_confidence": 0.9985068440437317,
+          "mean_entropy": 0.0037582123186439276,
+          "low_confidence": false
+        },
+        "1": {
+          "pixels": 2260,
+          "pct": 4.504145408163265,
+          "mean_confidence": 0.9693707227706909,
+          "mean_entropy": 0.07414969056844711,
+          "low_confidence": false
+        },
+        "2": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        },
+        "3": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        },
+        "4": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        }
+      },
+      "report_markdown": "## Findings:\nThe 2D abdominal MRI slice demonstrates the presence of the liver, which occupies 4.5% of the slice area, with a high mean confidence of 0.97 and low mean entropy of 0.07. Notably, the right kidney, left kidney, and spleen are not visible in this slice, suggesting they may be located outside of the imaged plane. The background comprises the majority of the slice, at 95.5%.\n\n## Impression:\nThe clinical impression is that this single MRI slice provides limited anatomical coverage, with only the liver visualized among the major abdominal organs. The absence of the kidneys and spleen in this slice is likely due to their location outside of the imaged plane rather than anatomical absence, given the typical anatomy. Further imaging slices would be necessary to fully assess the abdominal organs and identify any potential asymmetries or abnormalities.",
+      "passages_markdown": "",
+      "any_organ_flagged": true,
+      "uncertainty_mentioned": false,
+      "structure_ok": true,
+      "reference_usage_ok": null
+    },
+    {
+      "slice_id": "Subj_1slice_17",
+      "image_path": "DataSet\\test\\Img\\Subj_1slice_17.png",
+      "organ_stats": {
+        "total": 50176,
+        "0": {
+          "pixels": 47843,
+          "pct": 95.35036670918367,
+          "mean_confidence": 0.9979999661445618,
+          "mean_entropy": 0.005300423596054316,
+          "low_confidence": false
+        },
+        "1": {
+          "pixels": 1002,
+          "pct": 1.9969706632653061,
+          "mean_confidence": 0.9589892625808716,
+          "mean_entropy": 0.09442566335201263,
+          "low_confidence": false
+        },
+        "2": {
+          "pixels": 815,
+          "pct": 1.6242825255102038,
+          "mean_confidence": 0.9704594612121582,
+          "mean_entropy": 0.07953760027885437,
+          "low_confidence": false
+        },
+        "3": {
+          "pixels": 516,
+          "pct": 1.0283801020408163,
+          "mean_confidence": 0.9541463851928711,
+          "mean_entropy": 0.10700280964374542,
+          "low_confidence": false
+        },
+        "4": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        }
+      },
+      "report_markdown": "## Findings:\nThe 2D abdominal MRI slice demonstrates the presence of the liver and both kidneys, with the liver covering 2.0% of the slice and the right and left kidneys covering 1.6% and 1.0% of the slice, respectively. The spleen is not visible in this slice. The right kidney is larger than the left kidney, with a pixel area ratio of approximately 1.58:1. The mean confidence and entropy values for the segmented organs are within acceptable ranges, indicating reliable automated segmentation.\n\n## Impression:\nThe clinical impression is that of an abdominal MRI slice with normal liver and kidney presence, but notable asymmetry between the paired kidneys. The absence of the spleen in this single slice is not uncommon and may be due to slice positioning rather than splenic absence or atrophy. Further imaging slices would be necessary to fully evaluate abdominal anatomy and assess for any potential pathology.",
+      "passages_markdown": "",
+      "any_organ_flagged": true,
+      "uncertainty_mentioned": false,
+      "structure_ok": true,
+      "reference_usage_ok": null
+    },
+    {
+      "slice_id": "Subj_15slice_14",
+      "image_path": "DataSet\\test\\Img\\Subj_15slice_14.png",
+      "organ_stats": {
+        "total": 50176,
+        "0": {
+          "pixels": 49199,
+          "pct": 98.05285395408163,
+          "mean_confidence": 0.9978179931640625,
+          "mean_entropy": 0.006593097001314163,
+          "low_confidence": false
+        },
+        "1": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        },
+        "2": {
+          "pixels": 460,
+          "pct": 0.9167729591836735,
+          "mean_confidence": 0.711685299873352,
+          "mean_entropy": 0.6199964284896851,
+          "low_confidence": false
+        },
+        "3": {
+          "pixels": 196,
+          "pct": 0.390625,
+          "mean_confidence": 0.609860897064209,
+          "mean_entropy": 0.7660832405090332,
+          "low_confidence": false
+        },
+        "4": {
+          "pixels": 321,
+          "pct": 0.6397480867346939,
+          "mean_confidence": 0.8092820644378662,
+          "mean_entropy": 0.5919618010520935,
+          "low_confidence": false
+        }
+      },
+      "report_markdown": "## Findings:\nThe 2D abdominal MRI slice shows the presence of the right kidney, left kidney, and spleen, with the liver not visible in this particular slice. The right kidney covers 0.9% of the slice, while the left kidney covers 0.4%, indicating a notable asymmetry between the paired kidneys. The spleen covers 0.6% of the slice. The background comprises 98.1% of the slice, suggesting that the slice may be obtained from a relatively low abdominal level or that there is a significant amount of abdominal fat or other non-organ tissue present.\n\n## Impression:\nThe clinical impression is that of an abdominal MRI slice with asymmetric kidney size, which may warrant further evaluation to determine the cause of this asymmetry. The absence of the liver in this slice is not uncommon, depending on the slice level, but the relative sizes and positions of the kidneys and spleen should be correlated with additional imaging slices for a comprehensive assessment.",
+      "passages_markdown": "",
+      "any_organ_flagged": true,
+      "uncertainty_mentioned": false,
+      "structure_ok": true,
+      "reference_usage_ok": null
+    },
+    {
+      "slice_id": "Subj_1slice_2",
+      "image_path": "DataSet\\test\\Img\\Subj_1slice_2.png",
+      "organ_stats": {
+        "total": 50176,
+        "0": {
+          "pixels": 50176,
+          "pct": 100.0,
+          "mean_confidence": 0.9999861717224121,
+          "mean_entropy": 0.0001483379164710641,
+          "low_confidence": false
+        },
+        "1": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        },
+        "2": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        },
+        "3": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        },
+        "4": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        }
+      },
+      "report_markdown": "## Findings:\nThe provided 2D abdominal MRI slice shows an absence of segmented pixels for the liver, right kidney, left kidney, and spleen, with 100.0% of the slice comprised of background. This suggests that the slice may not have captured these organs or may be an outlier slice not representative of typical abdominal anatomy.\n\n## Impression:\nThe clinical impression is that the provided MRI slice does not contain the expected abdominal organs, including the liver, kidneys, and spleen, which may indicate that the slice is either too superior, too inferior, or not representative of the abdominal region. Further evaluation of adjacent slices or a review of the entire MRI study is recommended to assess the presence and morphology of these organs.",
+      "passages_markdown": "",
+      "any_organ_flagged": true,
+      "uncertainty_mentioned": false,
+      "structure_ok": true,
+      "reference_usage_ok": null
+    },
+    {
+      "slice_id": "Subj_1slice_10",
+      "image_path": "DataSet\\test\\Img\\Subj_1slice_10.png",
+      "organ_stats": {
+        "total": 50176,
+        "0": {
+          "pixels": 50056,
+          "pct": 99.7608418367347,
+          "mean_confidence": 0.9993480443954468,
+          "mean_entropy": 0.0022354978136718273,
+          "low_confidence": false
+        },
+        "1": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        },
+        "2": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        },
+        "3": {
+          "pixels": 120,
+          "pct": 0.23915816326530612,
+          "mean_confidence": 0.8191661834716797,
+          "mean_entropy": 0.45831069350242615,
+          "low_confidence": false
+        },
+        "4": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        }
+      },
+      "report_markdown": "## Findings:\nThe provided 2D abdominal MRI slice shows minimal organ presence, with the left kidney being the only visible organ, occupying 0.2% of the slice (120 px). The right kidney, liver, and spleen are not visible in this slice. The left kidney has a mean confidence of 0.82 and mean entropy of 0.46, indicating moderate confidence in its segmentation. The background comprises 99.8% of the slice.\n\n## Impression:\nThe clinical impression is that this MRI slice may not be representative of the typical abdominal anatomy, given the absence of the liver, right kidney, and spleen. The solitary presence of the left kidney, albeit with moderate segmentation confidence, suggests potential slice positioning or anatomical variability. Further imaging or slice analysis is recommended to fully assess abdominal anatomy and identify any potential abnormalities.",
+      "passages_markdown": "",
+      "any_organ_flagged": true,
+      "uncertainty_mentioned": false,
+      "structure_ok": true,
+      "reference_usage_ok": null
+    },
+    {
+      "slice_id": "Subj_15slice_11",
+      "image_path": "DataSet\\test\\Img\\Subj_15slice_11.png",
+      "organ_stats": {
+        "total": 50176,
+        "0": {
+          "pixels": 48686,
+          "pct": 97.03045280612244,
+          "mean_confidence": 0.9972928166389465,
+          "mean_entropy": 0.007408671546727419,
+          "low_confidence": false
+        },
+        "1": {
+          "pixels": 18,
+          "pct": 0.03587372448979592,
+          "mean_confidence": 0.5900431275367737,
+          "mean_entropy": 0.6747009754180908,
+          "low_confidence": false
+        },
+        "2": {
+          "pixels": 809,
+          "pct": 1.612324617346939,
+          "mean_confidence": 0.9553301334381104,
+          "mean_entropy": 0.11627461016178131,
+          "low_confidence": false
+        },
+        "3": {
+          "pixels": 663,
+          "pct": 1.3213488520408163,
+          "mean_confidence": 0.9377878904342651,
+          "mean_entropy": 0.15625615417957306,
+          "low_confidence": false
+        },
+        "4": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        }
+      },
+      "report_markdown": "## Findings:\nThe 2D abdominal MRI slice demonstrates the presence of the right and left kidneys, with the right kidney covering 1.6% of the slice and the left kidney covering 1.3% of the slice. The liver is barely visible, occupying 0.0% of the slice. Notably, the spleen is not visible in this slice. The right kidney is slightly larger than the left kidney, with a higher mean confidence and lower mean entropy on automated segmentation.\n\n## Impression:\nThe clinical impression is that of an abdominal MRI slice with asymmetric kidney size and normal kidney signal intensity, but with limited visibility of the liver and absence of the spleen, suggesting that this slice may not be representative of the entire abdominal anatomy or that there may be anatomical variations or pathology affecting these organs. Further imaging slices and clinical correlation are recommended for a comprehensive evaluation.",
+      "passages_markdown": "",
+      "any_organ_flagged": true,
+      "uncertainty_mentioned": true,
+      "structure_ok": true,
+      "reference_usage_ok": null
+    },
+    {
+      "slice_id": "Subj_1slice_7",
+      "image_path": "DataSet\\test\\Img\\Subj_1slice_7.png",
+      "organ_stats": {
+        "total": 50176,
+        "0": {
+          "pixels": 50176,
+          "pct": 100.0,
+          "mean_confidence": 0.999977707862854,
+          "mean_entropy": 0.0002145066246157512,
+          "low_confidence": false
+        },
+        "1": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        },
+        "2": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        },
+        "3": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        },
+        "4": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        }
+      },
+      "report_markdown": "## Findings:\nThe provided 2D abdominal MRI slice shows an absence of the liver, right kidney, left kidney, and spleen, with 0 pixels allocated to each of these organs. The entire slice is comprised of background, covering 100.0% of the area, totaling 50,176 pixels. There is a notable absence of abdominal organs in this slice, suggesting it may be positioned outside the typical anatomical range of these structures or that there is an issue with the segmentation algorithm.\n\n## Impression:\nThe clinical impression is that this MRI slice does not capture the expected abdominal anatomy, as none of the major organs such as the liver, kidneys, or spleen are present. This could be due to the slice being too superior or inferior, or there might be a technical issue with the imaging or segmentation process. Further evaluation with additional slices or imaging modalities is recommended to accurately assess abdominal anatomy.",
+      "passages_markdown": "",
+      "any_organ_flagged": true,
+      "uncertainty_mentioned": false,
+      "structure_ok": true,
+      "reference_usage_ok": null
+    },
+    {
+      "slice_id": "Subj_1slice_3",
+      "image_path": "DataSet\\test\\Img\\Subj_1slice_3.png",
+      "organ_stats": {
+        "total": 50176,
+        "0": {
+          "pixels": 50176,
+          "pct": 100.0,
+          "mean_confidence": 0.9999921321868896,
+          "mean_entropy": 0.00010010144615080208,
+          "low_confidence": false
+        },
+        "1": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        },
+        "2": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        },
+        "3": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        },
+        "4": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        }
+      },
+      "report_markdown": "## Findings:\nThe provided 2D abdominal MRI slice shows an absence of the liver, right kidney, left kidney, and spleen, with 0 pixels allocated to each of these organs. The entire slice is comprised of background, covering 100.0% of the area, totaling 50,176 pixels. There is a notable absence of abdominal organs in the slice, suggesting that the slice may be too superior or inferior to include these structures.\n\n## Impression:\nThe clinical impression is that the MRI slice does not capture the typical abdominal anatomy, as it lacks visualization of major organs such as the liver, kidneys, and spleen. This suggests that the slice may be outside the range of normal abdominal anatomy, potentially being too high or too low to include these structures. Further imaging or adjustment of slice selection may be necessary to adequately assess abdominal anatomy.",
+      "passages_markdown": "",
+      "any_organ_flagged": true,
+      "uncertainty_mentioned": false,
+      "structure_ok": true,
+      "reference_usage_ok": null
+    },
+    {
+      "slice_id": "Subj_15slice_21",
+      "image_path": "DataSet\\test\\Img\\Subj_15slice_21.png",
+      "organ_stats": {
+        "total": 50176,
+        "0": {
+          "pixels": 50176,
+          "pct": 100.0,
+          "mean_confidence": 0.9999691843986511,
+          "mean_entropy": 0.0003219681093469262,
+          "low_confidence": false
+        },
+        "1": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        },
+        "2": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        },
+        "3": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        },
+        "4": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        }
+      },
+      "report_markdown": "## Findings:\nThe provided 2D abdominal MRI slice shows an absence of segmented pixels for the liver, right kidney, left kidney, and spleen, with 100.0% of the slice comprised of background. This suggests that the slice may not have captured these organs or that there is an issue with the segmentation algorithm.\n\n## Impression:\nThe clinical impression is that the provided MRI slice does not contain the expected abdominal organs, including the liver, kidneys, and spleen, which may indicate that the slice is not representative of typical abdominal anatomy or that there is a technical issue with the imaging or segmentation process. Further evaluation with additional slices or imaging modalities is recommended to accurately assess abdominal organ presence and morphology.",
+      "passages_markdown": "",
+      "any_organ_flagged": true,
+      "uncertainty_mentioned": false,
+      "structure_ok": true,
+      "reference_usage_ok": null
+    },
+    {
+      "slice_id": "Subj_1slice_36",
+      "image_path": "DataSet\\test\\Img\\Subj_1slice_36.png",
+      "organ_stats": {
+        "total": 50176,
+        "0": {
+          "pixels": 49698,
+          "pct": 99.04735331632652,
+          "mean_confidence": 0.9995481967926025,
+          "mean_entropy": 0.0012517668073996902,
+          "low_confidence": false
+        },
+        "1": {
+          "pixels": 478,
+          "pct": 0.9526466836734695,
+          "mean_confidence": 0.9500430226325989,
+          "mean_entropy": 0.11821598559617996,
+          "low_confidence": false
+        },
+        "2": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        },
+        "3": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        },
+        "4": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        }
+      },
+      "report_markdown": "## Findings:\nThe provided 2D abdominal MRI slice segmentation results show a small area of the liver (1.0% of the slice) with high mean confidence (0.95) and low mean entropy (0.12), indicating a reliable detection. However, the right and left kidneys, as well as the spleen, are not detected in this slice, covering 0.0% of the area. The background comprises the majority of the slice (99.0%).\n\n## Impression:\nThe clinical impression is that this MRI slice may not be representative of the typical abdominal anatomy, given the absence of the kidneys and spleen, and the relatively small coverage of the liver. The lack of detection of paired structures (kidneys) suggests a potential asymmetry or an issue with slice positioning, warranting further evaluation with additional slices or imaging modalities to confirm the presence and integrity of these organs.",
+      "passages_markdown": "",
+      "any_organ_flagged": true,
+      "uncertainty_mentioned": false,
+      "structure_ok": true,
+      "reference_usage_ok": null
+    },
+    {
+      "slice_id": "Subj_1slice_15",
+      "image_path": "DataSet\\test\\Img\\Subj_1slice_15.png",
+      "organ_stats": {
+        "total": 50176,
+        "0": {
+          "pixels": 49070,
+          "pct": 97.79575892857143,
+          "mean_confidence": 0.9980136156082153,
+          "mean_entropy": 0.005519325844943523,
+          "low_confidence": false
+        },
+        "1": {
+          "pixels": 383,
+          "pct": 0.763313137755102,
+          "mean_confidence": 0.9156728386878967,
+          "mean_entropy": 0.20225751399993896,
+          "low_confidence": false
+        },
+        "2": {
+          "pixels": 570,
+          "pct": 1.136001275510204,
+          "mean_confidence": 0.9323333501815796,
+          "mean_entropy": 0.18245258927345276,
+          "low_confidence": false
+        },
+        "3": {
+          "pixels": 153,
+          "pct": 0.3049266581632653,
+          "mean_confidence": 0.8987825512886047,
+          "mean_entropy": 0.24499063193798065,
+          "low_confidence": false
+        },
+        "4": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        }
+      },
+      "report_markdown": "## Findings:\nThe 2D abdominal MRI slice demonstrates the presence of the liver and both kidneys, with the right kidney appearing larger than the left. The liver comprises 0.8% of the slice, while the right and left kidneys comprise 1.1% and 0.3% of the slice, respectively. Notably, the spleen is not visualized in this slice. The automated segmentation output shows high confidence levels for the liver and right kidney, with mean confidence values of 0.92 and 0.93, respectively.\n\n## Impression:\nThe clinical impression is that of an abdominal MRI slice with asymmetric kidney size, suggesting potential left kidney atrophy or hypoplasia. The absence of the spleen in this single slice may be due to slice selection or spleen location rather than absence. Further imaging and clinical correlation are necessary to fully evaluate the abdominal anatomy and determine the significance of these findings.",
+      "passages_markdown": "",
+      "any_organ_flagged": true,
+      "uncertainty_mentioned": true,
+      "structure_ok": true,
+      "reference_usage_ok": null
+    },
+    {
+      "slice_id": "Subj_1slice_20",
+      "image_path": "DataSet\\test\\Img\\Subj_1slice_20.png",
+      "organ_stats": {
+        "total": 50176,
+        "0": {
+          "pixels": 46674,
+          "pct": 93.02056760204081,
+          "mean_confidence": 0.9960366487503052,
+          "mean_entropy": 0.010756434872746468,
+          "low_confidence": false
+        },
+        "1": {
+          "pixels": 1937,
+          "pct": 3.8604113520408165,
+          "mean_confidence": 0.9549102187156677,
+          "mean_entropy": 0.11397348344326019,
+          "low_confidence": false
+        },
+        "2": {
+          "pixels": 722,
+          "pct": 1.4389349489795917,
+          "mean_confidence": 0.937667191028595,
+          "mean_entropy": 0.16246280074119568,
+          "low_confidence": false
+        },
+        "3": {
+          "pixels": 580,
+          "pct": 1.1559311224489797,
+          "mean_confidence": 0.9419164061546326,
+          "mean_entropy": 0.1518636792898178,
+          "low_confidence": false
+        },
+        "4": {
+          "pixels": 263,
+          "pct": 0.5241549744897959,
+          "mean_confidence": 0.9229153990745544,
+          "mean_entropy": 0.19608579576015472,
+          "low_confidence": false
+        }
+      },
+      "report_markdown": "## Findings:\nThe 2D abdominal MRI slice demonstrates the presence of the liver, right kidney, left kidney, and spleen. The liver comprises 3.9% of the slice, while the right and left kidneys account for 1.4% and 1.2%, respectively. The spleen is relatively smaller, covering 0.5% of the slice. Notably, there is a slight asymmetry between the paired kidneys, with the right kidney being approximately 24% larger than the left kidney.\n\n## Impression:\nThe abdominal organs are present and generally conform to expected anatomy, although there is a notable size discrepancy between the right and left kidneys. The relative coverage of the liver and spleen appears within typical ranges. Further evaluation of additional MRI slices and clinical correlation would be necessary to fully assess the significance of the observed renal asymmetry and to rule out any potential underlying pathology.",
+      "passages_markdown": "",
+      "any_organ_flagged": false,
+      "uncertainty_mentioned": true,
+      "structure_ok": true,
+      "reference_usage_ok": null
+    },
+    {
+      "slice_id": "Subj_1slice_26",
+      "image_path": "DataSet\\test\\Img\\Subj_1slice_26.png",
+      "organ_stats": {
+        "total": 50176,
+        "0": {
+          "pixels": 42383,
+          "pct": 84.46867028061224,
+          "mean_confidence": 0.9948658347129822,
+          "mean_entropy": 0.013188190758228302,
+          "low_confidence": false
+        },
+        "1": {
+          "pixels": 6229,
+          "pct": 12.414301658163266,
+          "mean_confidence": 0.9768022894859314,
+          "mean_entropy": 0.058267462998628616,
+          "low_confidence": false
+        },
+        "2": {
+          "pixels": 138,
+          "pct": 0.27503188775510207,
+          "mean_confidence": 0.8681227564811707,
+          "mean_entropy": 0.3422716557979584,
+          "low_confidence": false
+        },
+        "3": {
+          "pixels": 768,
+          "pct": 1.530612244897959,
+          "mean_confidence": 0.9490343928337097,
+          "mean_entropy": 0.13148324191570282,
+          "low_confidence": false
+        },
+        "4": {
+          "pixels": 658,
+          "pct": 1.3113839285714286,
+          "mean_confidence": 0.921966016292572,
+          "mean_entropy": 0.1907905489206314,
+          "low_confidence": false
+        }
+      },
+      "report_markdown": "## Findings:\nThe 2D abdominal MRI slice demonstrates the presence of the liver, spleen, and both kidneys. The liver is the predominant organ in the slice, occupying 12.4% of the total area. The left kidney is significantly larger than the right kidney, with 768 pixels compared to 138 pixels. The spleen is also present, covering 1.3% of the slice. The background comprises 84.5% of the slice, indicating that the organs are not extensively represented in this particular slice.\n\n## Impression:\nThe clinical impression is that of an abdominal MRI slice with notable asymmetry between the paired kidneys, suggesting potential right kidney atrophy or hypoplasia. The liver and spleen appear to be within normal limits in terms of relative coverage. Further imaging and clinical correlation are necessary to fully evaluate the significance of the observed kidney size discrepancy.",
+      "passages_markdown": "",
+      "any_organ_flagged": false,
+      "uncertainty_mentioned": true,
+      "structure_ok": true,
+      "reference_usage_ok": null
+    },
+    {
+      "slice_id": "Subj_1slice_18",
+      "image_path": "DataSet\\test\\Img\\Subj_1slice_18.png",
+      "organ_stats": {
+        "total": 50176,
+        "0": {
+          "pixels": 47455,
+          "pct": 94.57708864795919,
+          "mean_confidence": 0.9974410533905029,
+          "mean_entropy": 0.0067435880191624165,
+          "low_confidence": false
+        },
+        "1": {
+          "pixels": 1265,
+          "pct": 2.521125637755102,
+          "mean_confidence": 0.9582605361938477,
+          "mean_entropy": 0.10153942555189133,
+          "low_confidence": false
+        },
+        "2": {
+          "pixels": 846,
+          "pct": 1.6860650510204083,
+          "mean_confidence": 0.9623721241950989,
+          "mean_entropy": 0.09755629301071167,
+          "low_confidence": false
+        },
+        "3": {
+          "pixels": 610,
+          "pct": 1.2157206632653061,
+          "mean_confidence": 0.9554919600486755,
+          "mean_entropy": 0.10965118557214737,
+          "low_confidence": false
+        },
+        "4": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        }
+      },
+      "report_markdown": "## Findings:\nThe 2D abdominal MRI slice demonstrates the presence of the liver and both kidneys, with the liver occupying 2.5% of the slice and the right and left kidneys occupying 1.7% and 1.2% of the slice, respectively. The spleen is not visible in this slice. The mean confidence and entropy values for the segmented organs are within acceptable ranges, indicating reliable segmentation. Notably, there is an asymmetry between the paired kidneys, with the right kidney being larger than the left.\n\n## Impression:\nThe clinical impression is that of an abdominal MRI slice with normal liver presence and a notable asymmetry between the right and left kidneys, with the right kidney being larger. The absence of the spleen in this slice may be due to slice positioning rather than splenic agenesis, as the spleen may be located in a different anatomical plane. Further imaging slices would be necessary to fully evaluate abdominal anatomy.",
+      "passages_markdown": "",
+      "any_organ_flagged": true,
+      "uncertainty_mentioned": false,
+      "structure_ok": true,
+      "reference_usage_ok": null
+    },
+    {
+      "slice_id": "Subj_15slice_20",
+      "image_path": "DataSet\\test\\Img\\Subj_15slice_20.png",
+      "organ_stats": {
+        "total": 50176,
+        "0": {
+          "pixels": 50176,
+          "pct": 100.0,
+          "mean_confidence": 0.9995808601379395,
+          "mean_entropy": 0.0016953552840277553,
+          "low_confidence": false
+        },
+        "1": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        },
+        "2": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        },
+        "3": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        },
+        "4": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        }
+      },
+      "report_markdown": "## Findings:\nThe provided 2D abdominal MRI slice shows an absence of segmented liver, right kidney, left kidney, and spleen, with 0 pixels allocated to each of these organs. The entire slice is comprised of background, covering 100.0% of the area, totaling 50,176 pixels. There is no visible organ presence or structure to assess for asymmetry or comparison to typical anatomy.\n\n## Impression:\nThe clinical impression is that the provided MRI slice does not capture any of the major abdominal organs, suggesting it may be an outlier slice or not representative of the typical abdominal anatomy. Further review of adjacent slices or the entire MRI study is necessary to assess the abdominal organs and provide an accurate evaluation.",
+      "passages_markdown": "",
+      "any_organ_flagged": true,
+      "uncertainty_mentioned": true,
+      "structure_ok": true,
+      "reference_usage_ok": null
+    },
+    {
+      "slice_id": "Subj_1slice_30",
+      "image_path": "DataSet\\test\\Img\\Subj_1slice_30.png",
+      "organ_stats": {
+        "total": 50176,
+        "0": {
+          "pixels": 42009,
+          "pct": 83.72329400510205,
+          "mean_confidence": 0.9940599799156189,
+          "mean_entropy": 0.014804629608988762,
+          "low_confidence": false
+        },
+        "1": {
+          "pixels": 7612,
+          "pct": 15.170599489795919,
+          "mean_confidence": 0.9780535101890564,
+          "mean_entropy": 0.052480101585388184,
+          "low_confidence": false
+        },
+        "2": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        },
+        "3": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        },
+        "4": {
+          "pixels": 555,
+          "pct": 1.106106505102041,
+          "mean_confidence": 0.8911699652671814,
+          "mean_entropy": 0.2385314404964447,
+          "low_confidence": false
+        }
+      },
+      "report_markdown": "## Findings:\nThe 2D abdominal MRI slice demonstrates the presence of the liver, which occupies 15.2% of the slice, and the spleen, which occupies 1.1% of the slice. Notably, the right and left kidneys are not visible in this slice, suggesting they may be located outside of the imaged plane. The liver and spleen are identified with high and moderate confidence, respectively, as indicated by their mean confidence values of 0.98 and 0.89.\n\n## Impression:\nThe absence of the kidneys in this single slice is not uncommon, given the variability in organ position and the limited coverage of a single 2D slice. However, the presence and relative size of the liver and spleen appear within expected ranges. Further imaging, including additional slices or sequences, would be necessary to fully evaluate the abdominal organs and assess for any potential abnormalities, including the location and morphology of the kidneys.",
+      "passages_markdown": "",
+      "any_organ_flagged": true,
+      "uncertainty_mentioned": false,
+      "structure_ok": true,
+      "reference_usage_ok": null
+    },
+    {
+      "slice_id": "Subj_1slice_1",
+      "image_path": "DataSet\\test\\Img\\Subj_1slice_1.png",
+      "organ_stats": {
+        "total": 50176,
+        "0": {
+          "pixels": 50176,
+          "pct": 100.0,
+          "mean_confidence": 0.9999626278877258,
+          "mean_entropy": 0.000292149226879701,
+          "low_confidence": false
+        },
+        "1": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        },
+        "2": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        },
+        "3": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        },
+        "4": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        }
+      },
+      "report_markdown": "## Findings:\nThe provided 2D abdominal MRI slice shows an absence of the liver, right kidney, left kidney, and spleen, with 0 pixels allocated to each of these organs. The entire slice is comprised of background, covering 100.0% of the area, totaling 50,176 pixels. There is a notable absence of abdominal organs in the slice, suggesting that the slice may be too superior or inferior to include these structures.\n\n## Impression:\nThe clinical impression is that the MRI slice does not capture the typical abdominal anatomy, as none of the expected organs (liver, kidneys, spleen) are present. This suggests the slice may be outside the range of normal abdominal organ location, potentially being too high or too low. Further imaging or adjustment of slice selection may be necessary to adequately assess abdominal anatomy.",
+      "passages_markdown": "",
+      "any_organ_flagged": true,
+      "uncertainty_mentioned": false,
+      "structure_ok": true,
+      "reference_usage_ok": null
+    },
+    {
+      "slice_id": "Subj_1slice_23",
+      "image_path": "DataSet\\test\\Img\\Subj_1slice_23.png",
+      "organ_stats": {
+        "total": 50176,
+        "0": {
+          "pixels": 44484,
+          "pct": 88.65593112244898,
+          "mean_confidence": 0.9930508732795715,
+          "mean_entropy": 0.017228886485099792,
+          "low_confidence": false
+        },
+        "1": {
+          "pixels": 3692,
+          "pct": 7.358099489795919,
+          "mean_confidence": 0.9448331594467163,
+          "mean_entropy": 0.131565123796463,
+          "low_confidence": false
+        },
+        "2": {
+          "pixels": 762,
+          "pct": 1.5186543367346939,
+          "mean_confidence": 0.9608167409896851,
+          "mean_entropy": 0.10694434493780136,
+          "low_confidence": false
+        },
+        "3": {
+          "pixels": 772,
+          "pct": 1.5385841836734695,
+          "mean_confidence": 0.9473007321357727,
+          "mean_entropy": 0.135135680437088,
+          "low_confidence": false
+        },
+        "4": {
+          "pixels": 466,
+          "pct": 0.9287308673469388,
+          "mean_confidence": 0.9261870384216309,
+          "mean_entropy": 0.1777517944574356,
+          "low_confidence": false
+        }
+      },
+      "report_markdown": "## Findings:\nThe 2D abdominal MRI slice demonstrates the presence of the liver, right kidney, left kidney, and spleen. The liver comprises 7.4% of the slice, while the right and left kidneys are relatively smaller, each occupying approximately 1.5% of the slice. The spleen is the smallest of the segmented organs, covering 0.9% of the slice. The background, likely representing abdominal cavity and other non-organ tissues, dominates the slice at 88.7%. The kidneys appear relatively symmetric in size.\n\n## Impression:\nThe abdominal organs are present and appear to be within normal limits in terms of relative size and symmetry, with no notable asymmetries observed between the paired kidneys. The automated segmentation output suggests a typical anatomical arrangement, with the liver being the largest organ in the slice, followed by the kidneys and then the spleen. Further evaluation of additional MRI slices would be necessary for a comprehensive assessment.",
+      "passages_markdown": "",
+      "any_organ_flagged": false,
+      "uncertainty_mentioned": false,
+      "structure_ok": true,
+      "reference_usage_ok": null
+    },
+    {
+      "slice_id": "Subj_1slice_11",
+      "image_path": "DataSet\\test\\Img\\Subj_1slice_11.png",
+      "organ_stats": {
+        "total": 50176,
+        "0": {
+          "pixels": 50122,
+          "pct": 99.89237882653062,
+          "mean_confidence": 0.9991714954376221,
+          "mean_entropy": 0.002535023493692279,
+          "low_confidence": false
+        },
+        "1": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        },
+        "2": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        },
+        "3": {
+          "pixels": 54,
+          "pct": 0.10762117346938774,
+          "mean_confidence": 0.529646635055542,
+          "mean_entropy": 1.0014795064926147,
+          "low_confidence": true
+        },
+        "4": {
+          "pixels": 0,
+          "pct": 0.0,
+          "mean_confidence": null,
+          "mean_entropy": null,
+          "low_confidence": true
+        }
+      },
+      "report_markdown": "## Findings:\nThe provided 2D abdominal MRI slice shows minimal organ presence, with the liver, right kidney, and spleen being entirely absent. The left kidney is barely visible, occupying only 0.1% of the slice with low confidence (0.53) and high entropy (1.00) in the automated segmentation, suggesting potential inaccuracies. The majority of the slice (99.9%) is classified as background.\n\n## Impression:\nThe clinical impression is limited due to the near absence of abdominal organs in the provided MRI slice. The solitary presence of a faint, poorly segmented left kidney raises concerns about the accuracy of the automated segmentation and warrants human review for verification. The marked asymmetry between the absent right kidney and the barely visible left kidney, along with the complete absence of other major organs like the liver and spleen, suggests this slice may not be representative of typical abdominal anatomy, possibly due to slice positioning or technical issues.",
+      "passages_markdown": "",
+      "any_organ_flagged": true,
+      "uncertainty_mentioned": true,
+      "structure_ok": true,
+      "reference_usage_ok": null
+    }
+  ],
+  "auto_scores": {
+    "uncertainty_flagging_rate": {
+      "flagged_slices": 25,
+      "mentioned_when_flagged": 7,
+      "rate": 0.28,
+      "note": null
+    },
+    "structure_adherence_rate": 1.0
+  }
+}

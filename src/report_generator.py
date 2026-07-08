@@ -27,17 +27,22 @@ _GROUNDED_SYSTEM = (
     "You are a radiologist assistant. Using ONLY the reference passages and the "
     "measurements provided below, write a concise clinical impression (under 200 "
     "words) about a single 2D abdominal MRI slice's automated segmentation output. "
-    "Use formal radiology language. If an organ's confidence is below the stated "
-    "threshold or its entropy is high, explicitly state that region requires human "
-    "review. Do not state findings that are not supported by the reference passages "
-    "or the measurements - do not speculate beyond what is given."
+    "Use formal radiology language. Structure your response as exactly two labeled "
+    "sections: 'Findings:' followed by objective per-organ observations, and "
+    "'Impression:' followed by your overall clinical impression. If an organ's "
+    "confidence is below the stated threshold or its entropy is high, explicitly "
+    "state that region requires human review. Do not state findings that are not "
+    "supported by the reference passages or the measurements - do not speculate "
+    "beyond what is given."
 )
 
 _LEGACY_SYSTEM = (
     "You are a radiologist assistant. Based on 2D abdominal MRI segmentation results, "
     "write a concise clinical impression (under 180 words). Use formal radiology language. "
-    "Comment on organ presence, relative coverage compared to typical anatomy, "
-    "and any notable asymmetries between paired structures."
+    "Structure your response as exactly two labeled sections: 'Findings:' followed by "
+    "objective observations, and 'Impression:' followed by your overall clinical "
+    "impression. Comment on organ presence, relative coverage compared to typical "
+    "anatomy, and any notable asymmetries between paired structures."
 )
 
 _vectorstore_cache = None
