@@ -1,0 +1,21 @@
+{
+  "model": "swin_daf",
+  "model_name": "SwinDAF-CHAOS",
+  "swin_encoder": "swin_tiny_patch4_window7_224",
+  "epochs": 30,
+  "batch_size": 16,
+  "lr": 0.001,
+  "seed": 42,
+  "amp_bf16": true,
+  "checkpoint": "model\\Best_SwinDAF-CHAOS.pth",
+  "best_epoch": 21,
+  "best_val_dice_2d_mean": 0.9124695658683777,
+  "best_val_dice_3d_per_organ": [
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "best_val_dice_3d_mean": 0.0,
+  "date_utc": "20260708T022250Z"
+}
