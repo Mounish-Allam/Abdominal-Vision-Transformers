@@ -2,10 +2,11 @@
 Hugging Face Spaces entry point.
 
 Environment variables (set as Space Secrets on HF):
-  HF_MODEL_REPO_ID  — e.g. "your-username/swin-daf-chaos-mri"
-  HF_MODEL_FILENAME — filename inside that repo (default: Best_MS-Dual-Guided.pth)
+  HF_MODEL_REPO_ID  — e.g. "MounishAllam/swin-daf-chaos-mri"
+  HF_MODEL_FILENAME — filename inside that repo (default: Best_SwinDAF-CHAOS.pth)
   ENCODER_NAME      — swin_tiny/small/base (default: swin_tiny_patch4_window7_224)
   GROQ_API_KEY      — free key from console.groq.com; enables LLM clinical reports
+                       (or LLM_PROVIDER=ollama for a local/private alternative)
 """
 
 import os
@@ -21,7 +22,7 @@ from demo import build_ui, load_model, _cache as _model_cache
 
 # ── Read config from env vars ─────────────────────────────────────────────────
 HF_REPO_ID  = os.environ.get("HF_MODEL_REPO_ID",  "")
-HF_FILENAME = os.environ.get("HF_MODEL_FILENAME",  "Best_MS-Dual-Guided.pth")
+HF_FILENAME = os.environ.get("HF_MODEL_FILENAME",  "Best_SwinDAF-CHAOS.pth")
 ENCODER     = os.environ.get("ENCODER_NAME",        "swin_tiny_patch4_window7_224")
 
 # ── Pre-load model weights from HF Hub ───────────────────────────────────────

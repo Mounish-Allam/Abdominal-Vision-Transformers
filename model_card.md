@@ -5,8 +5,13 @@ tags:
   - segmentation
   - mri
   - swin-transformer
+  - vision-transformer
+  - attention-mechanism
   - pytorch
   - abdominal-organs
+  - rag
+  - llm
+  - gradio
 datasets:
   - CHAOS
 metrics:
@@ -15,9 +20,17 @@ metrics:
 
 # SwinDAF — Abdominal MRI Segmentation (CHAOS T2-SPIR)
 
-Swin Transformer encoder (timm, ImageNet-pretrained) + Dual Attention Fusion decoder
-(PAM, CAM, semantic guidance, multi-scale deep supervision) for 5-class segmentation
-of abdominal organs on T2-SPIR MRI slices.
+A Swin Transformer encoder (timm, ImageNet-pretrained) feeding a Dual Attention Fusion decoder
+(PAM, CAM, semantic guidance, multi-scale deep supervision) for 5-class segmentation of
+abdominal organs on T2-SPIR MRI — deployed end-to-end with an interactive dashboard and a
+RAG-grounded LLM clinical report.
+
+| | |
+|---|---|
+| **Live demo** | [huggingface.co/spaces/MounishAllam/swin-daf-chaos-mri](https://huggingface.co/spaces/MounishAllam/swin-daf-chaos-mri) |
+| **Source code** | [github.com/Mounish-Allam/Abdominal-Vision-Transformers](https://github.com/Mounish-Allam/Abdominal-Vision-Transformers) |
+| **Dataset** | [CHAOS](https://chaos.grand-challenge.org/) T2-SPIR MRI, 20 subjects, subject-level 16/2/2 split |
+| **Test-set result** | 0.762 mean Dice (2D) — full breakdown and a disclosed failure case below |
 
 > ⚠️ **Research and education demo. Not a medical device. Not for diagnostic use.**
 
@@ -64,7 +77,7 @@ model predicts almost no liver/spleen pixels at all for that subject) despite sc
 both kidneys. This was investigated directly (ruled out label errors and data leakage;
 an intensity-jitter augmentation fix was tried and did not resolve it) — see the project
 README's Failure analysis section for the full writeup. Full numbers, methodology, and
-reproduction commands: <https://github.com/MounishAllam/Abdominal-Vision-Transformers>.
+reproduction commands: <https://github.com/Mounish-Allam/Abdominal-Vision-Transformers>.
 
 ## Usage
 
@@ -94,5 +107,5 @@ evaluated for regulatory clearance, was trained on a small public research datas
 20 subjects), and its failure mode above is not fully understood. Do not use it for
 diagnosis, treatment decisions, or any clinical purpose. See the linked GitHub repository
 for the full evaluation methodology, failure analysis, and an interactive demo with
-confidence/entropy visualization and an LLM-generated (Groq, Llama 3.3 70B) clinical report
-that is explicitly not a medical finding.
+confidence/entropy visualization and an LLM-generated clinical report (Groq Llama 3.3 70B by
+default, swappable to a local Ollama model) that is explicitly not a medical finding.

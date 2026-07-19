@@ -4,10 +4,10 @@ Upload your trained .pth checkpoint and model card to a Hugging Face Model Hub r
 Usage:
     python upload_weights.py \
         --weights model/Best_SwinDAF-CHAOS.pth \
-        --repo    your-username/swin-daf-chaos-mri
+        --repo    MounishAllam/swin-daf-chaos-mri
 
 You must be logged in first:
-    huggingface-cli login
+    hf auth login
 """
 
 import argparse
