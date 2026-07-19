@@ -2,6 +2,7 @@
 
 > **Swin Transformer encoder + Dual Attention Fusion decoder for multi-organ segmentation on CHAOS MRI**
 
+[![CI](https://github.com/Mounish-Allam/Abdominal-Vision-Transformers/actions/workflows/ci.yml/badge.svg)](https://github.com/Mounish-Allam/Abdominal-Vision-Transformers/actions/workflows/ci.yml)
 ![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
 ![PyTorch](https://img.shields.io/badge/PyTorch-2.0%2B-orange)
 ![Gradio](https://img.shields.io/badge/Gradio-4.0%2B-green)

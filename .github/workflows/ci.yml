@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+          cache-dependency-path: requirements.txt
+
+      - name: Upgrade packaging tools
+        run: python -m pip install --upgrade pip setuptools wheel
+
+      - name: Install CPU-only torch
+        run: pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+
+      - name: Install project dependencies
+        env:
+          # Works around a setuptools/_distutils_hack conflict some packages
+          # (e.g. MedPy) hit during their build-isolation step.
+          SETUPTOOLS_USE_DISTUTILS: stdlib
+        run: pip install -r requirements.txt ruff
+
+      - name: ruff check
+        run: ruff check .
+
+      - name: pytest
+        run: pytest tests/ -v
