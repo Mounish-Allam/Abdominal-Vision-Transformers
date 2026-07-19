@@ -3,8 +3,6 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 from .attention import (
-    PAM_Module,
-    CAM_Module,
     semanticModule,
     PAM_CAM_Layer,
     MultiConv,

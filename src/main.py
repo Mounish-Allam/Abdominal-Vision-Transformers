@@ -27,11 +27,11 @@ from common.utils import (evaluate3D,
                           inference,
                           to_var
                           )
-    
+
 def weights_init(m):
-    if type(m) == nn.Conv2d or type(m) == nn.ConvTranspose2d:
+    if type(m) is nn.Conv2d or type(m) is nn.ConvTranspose2d:
         nn.init.xavier_normal(m.weight.data)
-    elif type(m) == nn.BatchNorm2d:
+    elif type(m) is nn.BatchNorm2d:
         m.weight.data.normal_(1.0, 0.02)
         m.bias.data.fill_(0)
 
@@ -97,13 +97,13 @@ def runTraining(args):
                             batch_size=batch_size_val,
                             num_workers=args.num_workers,
                             shuffle=False)
-                                                   
+
     val_loader_save_images = DataLoader(val_set,
                                         batch_size=batch_size_val_save,
                                         num_workers= args.num_workers,
                                         shuffle=False)
 
-                                                                    
+
     # Initialize
     print("~~~~~~~~~~~ Creating model: {} ~~~~~~~~~~".format(args.model))
     if args.model == 'swin_daf':
@@ -159,7 +159,7 @@ def runTraining(args):
         lossVal = []
 
         totalImages = len(train_loader)
-       
+
         for j, data in enumerate(train_loader):
             image, labels, img_names = data
 
@@ -276,18 +276,18 @@ def runTraining(args):
                                  DiceT.data.cpu().data.numpy(),
                                  DiceZ.data.cpu().data.numpy(),))
 
-      
+
         printProgressBar(totalImages, totalImages,
                              done="[Training] Epoch: {}, LossG: {:.4f}".format(i,np.mean(lossVal)))
-       
+
         # Save statistics
         modelName = args.modelName
         directory = args.save_dir + modelName
-        
+
         Losses.append(np.mean(lossVal))
-        
+
         d1,d2,d3,d4 = inference(net, val_loader)
-        
+
         d1Val.append(d1)
         d2Val.append(d2)
         d3Val.append(d3)
@@ -328,7 +328,7 @@ def runTraining(args):
         np.save(os.path.join(directory, 'd1Val_3D.npy'), d2Val_3D)
         np.save(os.path.join(directory, 'd2Val_3D.npy'), d3Val_3D)
         np.save(os.path.join(directory, 'd3Val_3D.npy'), d4Val_3D)
-        
+
         np.save(os.path.join(directory, 'd0Val_3D_std.npy'), d1Val_3D_std)
         np.save(os.path.join(directory, 'd1Val_3D_std.npy'), d2Val_3D_std)
         np.save(os.path.join(directory, 'd2Val_3D_std.npy'), d3Val_3D_std)

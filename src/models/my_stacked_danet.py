@@ -2,8 +2,6 @@ import torch
 import torch.nn.functional as F
 import torch.nn as nn
 from .attention import (
-    PAM_Module,
-    CAM_Module,
     semanticModule,
     PAM_CAM_Layer,
     MultiConv
@@ -29,7 +27,6 @@ class DAF_stack(nn.Module):
             nn.Conv2d(256, 64, kernel_size=1), nn.BatchNorm2d(64), nn.PReLU()
         )
 
-        inter_channels = 64
         out_channels=64
 
         self.conv6_1 = nn.Sequential(nn.Dropout2d(0.1, False), nn.Conv2d(64, out_channels, 1))
@@ -56,12 +53,12 @@ class DAF_stack(nn.Module):
         self.pam_attention_1_1= PAM_CAM_Layer(64, True)
         self.cam_attention_1_1= PAM_CAM_Layer(64, False)
         self.semanticModule_1_1 = semanticModule(128)
-        
+
         self.conv_sem_1_1 = nn.Conv2d(128, 64, kernel_size=3, padding=1)
         self.conv_sem_1_2 = nn.Conv2d(128, 64, kernel_size=3, padding=1)
         self.conv_sem_1_3 = nn.Conv2d(128, 64, kernel_size=3, padding=1)
         self.conv_sem_1_4 = nn.Conv2d(128, 64, kernel_size=3, padding=1)
-    
+
     #Dual Attention mechanism
         self.pam_attention_1_2 = PAM_CAM_Layer(64)
         self.cam_attention_1_2 = PAM_CAM_Layer(64, False)
@@ -69,11 +66,11 @@ class DAF_stack(nn.Module):
         self.cam_attention_1_3 = PAM_CAM_Layer(64, False)
         self.pam_attention_1_4 = PAM_CAM_Layer(64)
         self.cam_attention_1_4 = PAM_CAM_Layer(64, False)
-        
+
         self.pam_attention_2_1 = PAM_CAM_Layer(64)
         self.cam_attention_2_1 = PAM_CAM_Layer(64, False)
         self.semanticModule_2_1 = semanticModule(128)
-        
+
         self.conv_sem_2_1 = nn.Conv2d(128, 64, kernel_size=3, padding=1)
         self.conv_sem_2_2 = nn.Conv2d(128, 64, kernel_size=3, padding=1)
         self.conv_sem_2_3 = nn.Conv2d(128, 64, kernel_size=3, padding=1)
@@ -85,7 +82,7 @@ class DAF_stack(nn.Module):
         self.cam_attention_2_3 = PAM_CAM_Layer(64, False)
         self.pam_attention_2_4 = PAM_CAM_Layer(64)
         self.cam_attention_2_4 = PAM_CAM_Layer(64, False)
-        
+
         self.fuse1 = MultiConv(256, 64, False)
 
         self.attention4 = MultiConv(128, 64)
@@ -149,7 +146,7 @@ class DAF_stack(nn.Module):
         attn_pam1 = self.pam_attention_1_1(torch.cat((down1, fuse1), 1))
         attn_cam1 = self.cam_attention_1_1(torch.cat((down1, fuse1), 1))
         attention1_1 = self.conv8_4((attn_cam1+attn_pam1) * self.conv_sem_1_4(semanticModule_1_4))
-        
+
         ##new design with stacked attention
 
         semVector_2_1, semanticModule_2_1 = self.semanticModule_2_1(torch.cat((down4, attention1_4 * fuse1), 1))
@@ -173,7 +170,7 @@ class DAF_stack(nn.Module):
         refine1_2 = self.cam_attention_2_1(torch.cat((down1,attention1_1 * fuse1),1))
 
         refine1=self.conv8_14((refine1_1+refine1_2) * self.conv_sem_2_4(semanticModule_2_4))
-        
+
         predict4_2 = self.predict4_2(refine4)
         predict3_2 = self.predict3_2(refine3)
         predict2_2 = self.predict2_2(refine2)
@@ -188,7 +185,7 @@ class DAF_stack(nn.Module):
         predict2_2 = F.interpolate(predict2_2, size=x.size()[2:], mode='bilinear')
         predict3_2 = F.interpolate(predict3_2, size=x.size()[2:], mode='bilinear')
         predict4_2 = F.interpolate(predict4_2, size=x.size()[2:], mode='bilinear')
-        
+
         if self.training:
             return semVector_1_1,\
                    semVector_2_1, \
@@ -224,4 +221,4 @@ class DAF_stack(nn.Module):
                    predict4_2
         else:
             return ((predict1_2 + predict2_2 + predict3_2 + predict4_2) / 4)
-        
+

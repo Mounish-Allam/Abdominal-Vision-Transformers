@@ -1,6 +1,5 @@
 from functools import reduce
 
-import torch
 import torch.nn as nn
 from torchvision.models import resnext50_32x4d, resnext101_32x8d
 
@@ -36,7 +35,7 @@ def resnext50():
         Lambda(lambda  x: x.view(1, -1) if 1 == len(x.size()) else x),
         nn.Linear(2048, 1000)
     )
-    return model 
+    return model
 
 def resnext101():
     model  = resnext101_32x8d()

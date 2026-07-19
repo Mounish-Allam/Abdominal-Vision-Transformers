@@ -1,25 +1,20 @@
 import os
 import numpy as np
-import scipy.io as sio
-import pdb
-import time
 from os.path import isfile, join
 
 import nibabel as nib
 from PIL import Image
-from medpy.metric.binary import dc,hd
-import skimage.transform as skiTransf
+from medpy.metric.binary import dc
 
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 from torch.autograd import Variable
 import torchvision
 
 from .progressBar import printProgressBar
 
 def load_nii(imageFileName, printFileNames):
-    if printFileNames == True:
+    if printFileNames:
         print (" ... Loading file: {}".format(imageFileName))
 
     img_proxy = nib.load(imageFileName)
@@ -120,7 +115,7 @@ def reconstruct3D(modelName,epoch, isBest=False):
              nib.save(imgNifti, niftiName)
 
 
-        
+
 class computeDiceOneHot(nn.Module):
     def __init__(self):
         super(computeDiceOneHot, self).__init__()
@@ -169,7 +164,7 @@ def DicesToDice(Dices):
     sums = Dices.sum(dim=0)
     return (2 * sums[0] + 1e-8) / (sums[1] + 1e-8)
 
-    
+
 def getSingleImage(pred):
     # input is a 4-channels image corresponding to the predictions of the net
     # output is a gray level image (1 channel) of the segmentation with "discrete" values
@@ -181,9 +176,9 @@ def getSingleImage(pred):
     Val[2] = 0.49411765
     Val[3] = 0.7411765
     Val[4] = 0.9882353
-    
+
     x = predToSegmentation(pred)
-   
+
     out = x * Val.view(1, 5, 1, 1)
 
     return out.sum(dim=1, keepdim=True)
@@ -203,10 +198,10 @@ def getOneHotSegmentation(batch):
     label2 = 0.49411765
     label3 = 0.7411765
     label4 = 0.9882353
-    
+
     oneHotLabels = torch.cat((batch == backgroundVal, batch == label1, batch == label2, batch == label3, batch == label4),
                              dim=1)
-    
+
     return oneHotLabels.float()
 
 
@@ -214,7 +209,7 @@ def getTargetSegmentation(batch):
     # input is 1-channel of values between 0 and 1
     # values are as follows : 0, 0.3137255, 0.627451 and 0.94117647
     # output is 1 channel of discrete values : 0, 1, 2 and 3
-    
+
     denom = 0.24705882 # for Chaos MRI  Dataset this value
 
     return (batch / denom).round().long().squeeze()
@@ -234,15 +229,12 @@ def saveImages_for3D(net, img_batch, batch_size, epoch, modelName, deepSupervisi
         image, labels, img_names = data
 
         MRI = to_var(image)
-        Segmentation = to_var(labels)
 
         segmentation_prediction = net(MRI)
 
         pred_y = softMax(segmentation_prediction)
-        
-        segmentation = getSingleImage(pred_y)
 
-        out = torch.cat((MRI, segmentation, Segmentation))
+        segmentation = getSingleImage(pred_y)
 
         basename = os.path.basename(img_names[0])
         str_subj = basename.split('slice')
@@ -263,14 +255,14 @@ def inference(net, img_batch):
     Dice2 = torch.zeros(total, 2)
     Dice3 = torch.zeros(total, 2)
     Dice4 = torch.zeros(total, 2)
-    
+
     net.eval()
     img_names_ALL = []
 
     dice = computeDiceOneHot().cuda()
     softMax = nn.Softmax().cuda()
     for i, data in enumerate(img_batch):
-        
+
         printProgressBar(i, total, prefix="[Inference] Getting segmentations...", length=30)
         image, labels, img_names = data
         img_names_ALL.append(img_names[0].split('/')[-1].split('.')[0])
@@ -297,7 +289,7 @@ def inference(net, img_batch):
     ValDice2 = DicesToDice(Dice2)
     ValDice3 = DicesToDice(Dice3)
     ValDice4 = DicesToDice(Dice4)
-   
+
     return [ValDice1,ValDice2,ValDice3,ValDice4]
 
 

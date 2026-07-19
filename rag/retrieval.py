@@ -20,11 +20,11 @@ _REPO_ROOT = Path(__file__).resolve().parent.parent
 if str(_REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(_REPO_ROOT))
 
-from langchain_community.vectorstores import FAISS
-from langchain_core.documents import Document
-from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_community.vectorstores import FAISS  # noqa: E402
+from langchain_core.documents import Document  # noqa: E402
+from langchain_huggingface import HuggingFaceEmbeddings  # noqa: E402
 
-from rag.build_index import EMBEDDING_MODEL_NAME, INDEX_DIR
+from rag.build_index import EMBEDDING_MODEL_NAME, INDEX_DIR  # noqa: E402
 
 ORGAN_NAMES = {1: "Liver", 2: "Right Kidney", 3: "Left Kidney", 4: "Spleen"}
 PRESENCE_EPSILON_PCT = 0.5

@@ -10,7 +10,11 @@ Run:
     python src/demo.py --weights model/Best_SwinDAF-CHAOS.pth --share
 """
 
-import sys, os, io, argparse, glob
+import sys
+import os
+import io
+import argparse
+import glob
 import numpy as np
 from PIL import Image
 import matplotlib
@@ -244,7 +248,7 @@ def make_pixel_donut(stats: dict) -> Image.Image:
     labels = ["Background"] + [ORGAN_NAMES[i] for i in range(1, 5)]
     sizes  = [stats[0]["pct"]] + [stats[i]["pct"] for i in range(1, 5)]
     colors = ["#cccccc", "#ff3c3c", "#3cdc3c", "#3c78ff", "#ffd200"]
-    non_zero = [(l, s, c) for l, s, c in zip(labels, sizes, colors) if s > 0]
+    non_zero = [(label, s, c) for label, s, c in zip(labels, sizes, colors) if s > 0]
     if not non_zero:
         non_zero = [("Background", 100, "#cccccc")]
     labels_, sizes_, colors_ = zip(*non_zero)
@@ -254,7 +258,7 @@ def make_pixel_donut(stats: dict) -> Image.Image:
         sizes_, colors=colors_, startangle=90,
         wedgeprops=dict(width=0.5, edgecolor="white", linewidth=1.5),
     )
-    ax.legend(wedges, [f"{l} ({s:.1f}%)" for l, s in zip(labels_, sizes_)],
+    ax.legend(wedges, [f"{label} ({s:.1f}%)" for label, s in zip(labels_, sizes_)],
               loc="lower center", bbox_to_anchor=(0.5, -0.18),
               fontsize=8, frameon=False, ncol=2)
     ax.set_title("Pixel Distribution", fontsize=12, fontweight="bold")

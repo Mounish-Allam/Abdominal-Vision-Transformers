@@ -115,7 +115,7 @@ class CAM_Module(nn.Module):
     def __init__(self, in_dim):
         super(CAM_Module, self).__init__()
         self.chanel_in = in_dim
-        
+
         self.gamma = nn.Parameter(torch.zeros(1))
         self.softmax  = nn.Softmax(dim=-1)
     def forward(self,x):
@@ -131,7 +131,7 @@ class CAM_Module(nn.Module):
         m_batchsize, C, height, width = x.size()
         proj_query = x.view(m_batchsize, C, -1)
         proj_key = x.view(m_batchsize, C, -1).permute(0, 2, 1)
-       
+
         energy = torch.bmm(proj_query, proj_key)
         energy_new = torch.max(energy, -1, keepdim=True)[0].expand_as(energy)-energy
         attention = self.softmax(energy_new)
@@ -146,7 +146,7 @@ class CAM_Module(nn.Module):
 class PAM_CAM_Layer(nn.Module):
     """
     Helper Function for PAM and CAM attention
-    
+
     Parameters:
     ----------
     input:
@@ -157,24 +157,24 @@ class PAM_CAM_Layer(nn.Module):
     """
     def __init__(self, in_ch, use_pam = True):
         super(PAM_CAM_Layer, self).__init__()
-        
+
         self.attn = nn.Sequential(
             nn.Conv2d(in_ch * 2, in_ch, kernel_size=3, padding=1),
             nn.BatchNorm2d(in_ch),
             nn.PReLU(),
             PAM_Module(in_ch) if use_pam else CAM_Module(in_ch),
-			nn.Conv2d(in_ch, in_ch, kernel_size=3, padding=1),
+            nn.Conv2d(in_ch, in_ch, kernel_size=3, padding=1),
             nn.BatchNorm2d(in_ch),
             nn.PReLU()
         )
-    
+
     def forward(self, x):
         return self.attn(x)
-    
+
 class MultiConv(nn.Module):
     """
     Helper function for Multiple Convolutions for refining.
-    
+
     Parameters:
     ----------
     inputs:
@@ -186,18 +186,18 @@ class MultiConv(nn.Module):
     """
     def __init__(self, in_ch, out_ch, attn = True):
         super(MultiConv, self).__init__()
-        
+
         self.fuse_attn = nn.Sequential(
             nn.Conv2d(in_ch, out_ch, kernel_size=3, padding=1),
-            nn.BatchNorm2d(64), 
+            nn.BatchNorm2d(64),
             nn.PReLU(),
-            nn.Conv2d(out_ch, out_ch, kernel_size=3, padding=1), 
-            nn.BatchNorm2d(64), 
+            nn.Conv2d(out_ch, out_ch, kernel_size=3, padding=1),
+            nn.BatchNorm2d(64),
             nn.PReLU(),
-            nn.Conv2d(out_ch, out_ch, kernel_size=1), 
-            nn.BatchNorm2d(64), 
+            nn.Conv2d(out_ch, out_ch, kernel_size=1),
+            nn.BatchNorm2d(64),
             nn.Softmax2d() if attn else nn.PReLU()
         )
-    
+
     def forward(self, x):
         return self.fuse_attn(x)

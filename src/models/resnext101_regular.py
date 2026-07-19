@@ -1,13 +1,12 @@
-import torch
 from torch import nn
 
-from .resnext import resnext50, resnext101
+from .resnext import resnext101
 
 class ResNeXt101(nn.Module):
     def __init__(self):
         super(ResNeXt101, self).__init__()
         net = resnext101()
-        
+
         net = list(net.children())
         self.layer0 = nn.Sequential(*net[:3])
         self.layer1 = nn.Sequential(*net[3: 5])

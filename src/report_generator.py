@@ -4,7 +4,6 @@ import sys
 from pathlib import Path
 
 try:
-    from langchain_core.documents import Document
     from langchain_core.prompts import ChatPromptTemplate
 
     LANGCHAIN_AVAILABLE = True
@@ -15,7 +14,7 @@ _REPO_ROOT = Path(__file__).resolve().parent.parent
 if str(_REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(_REPO_ROOT))
 
-from llm.provider import ProviderError, get_llm_client
+from llm.provider import ProviderError, get_llm_client  # noqa: E402
 
 ORGAN_NAMES = {1: "Liver", 2: "Right Kidney", 3: "Left Kidney", 4: "Spleen"}
 

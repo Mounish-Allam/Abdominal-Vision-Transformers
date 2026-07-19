@@ -1,18 +1,12 @@
 from __future__ import print_function, division
 
 import os
-import torch
-import pandas as pd
-from skimage import io, transform
-import numpy as np
-from torch.utils.data import Dataset, DataLoader
-from torchvision import transforms, utils
+from torch.utils.data import Dataset
 from PIL import Image, ImageOps
-from random import random, randint
+from random import random
 
 # Ignore warnings
 import warnings
-import pdb
 
 warnings.filterwarnings("ignore")
 
@@ -28,7 +22,7 @@ def make_dataset(root, mode):
 
         images.sort()
         labels.sort()
-        
+
         for it_im, it_gt in zip(images, labels):
             item = (os.path.join(train_img_path, it_im), os.path.join(train_mask_path, it_gt))
             items.append(item)
@@ -103,7 +97,7 @@ class MedicalImageDataset(Dataset):
         #mask = Image.open(mask_path)  # .convert('RGB')
         img = Image.open(img_path).convert('L')
         mask = Image.open(mask_path).convert('L')
-        
+
         #print('{} and {}'.format(img_path,mask_path))
         if self.equalize:
             img = ImageOps.equalize(img)

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import sys
 import os
-import pdb
 
 def printProgressBar(iteration, total, prefix='', suffix='', decimals=1, length=100,
                      fill='=', empty=' ', tip='>', begin='[', end=']', done="[DONE]", clear=True):
@@ -101,7 +100,6 @@ def print_flush(txt=''):
 
 
 if os.name == 'nt':
-    import msvcrt
     import ctypes
 
     class _CursorInfo(ctypes.Structure):
