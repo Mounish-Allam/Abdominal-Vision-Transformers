@@ -1,6 +1,13 @@
 # Abdominal MRI Organ Segmentation — SwinDAF
 
-> **Swin Transformer encoder + Dual Attention Fusion decoder for multi-organ segmentation on CHAOS MRI**
+An AI system that automatically outlines organs (liver, kidneys, spleen) on abdominal MRI
+scans and writes a plain-language clinical summary of what it finds — built end-to-end as a
+portfolio demonstration of applied ML engineering: a trained vision model, an LLM report
+layer grounded in retrieved reference material (RAG), honest real-world evaluation with a
+disclosed failure case, and a live public deployment.
+
+> **Technical summary:** Swin Transformer encoder + Dual Attention Fusion decoder for
+> multi-organ segmentation on CHAOS MRI
 
 [![CI](https://github.com/Mounish-Allam/Abdominal-Vision-Transformers/actions/workflows/ci.yml/badge.svg)](https://github.com/Mounish-Allam/Abdominal-Vision-Transformers/actions/workflows/ci.yml)
 ![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
@@ -16,7 +23,7 @@
 | **Trained weights** | [`MounishAllam/swin-daf-chaos-mri`](https://huggingface.co/MounishAllam/swin-daf-chaos-mri) on HF Hub |
 | **Dataset** | [CHAOS](https://chaos.grand-challenge.org/) T2-SPIR MRI, 20 subjects, subject-level 16/2/2 split |
 | **Cost** | **$0 cloud/API cost** — free-tier Groq LLM, local sentence-transformers embeddings; training itself used a local RTX 5080 (not free hardware, just not a cloud bill) |
-| **Test-set result** | SwinDAF 0.762 mean Dice (2D) vs. 0.702 DAF baseline — see [Results](#results) for the full breakdown, including a disclosed failure case |
+| **Test-set result** | SwinDAF 0.762 mean Dice (2D) vs. 0.702 DAF baseline — Dice measures overlap with the ground-truth outline (1.0 = perfect, 0.0 = no overlap); see [Results](#results) for the full breakdown, including a disclosed failure case |
 | **RAG grounding** | Cuts unsupported-claim rate 1.3% → 0.6%, raises uncertainty-flagging 28% → 100% — see [Report grounding evaluation](#report-grounding-evaluation-rag-beforeafter) |
 
 ---
