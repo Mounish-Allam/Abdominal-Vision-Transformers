@@ -15,7 +15,7 @@
 | **Live demo** | [huggingface.co/spaces/MounishAllam/swin-daf-chaos-mri](https://huggingface.co/spaces/MounishAllam/swin-daf-chaos-mri) |
 | **Trained weights** | [`MounishAllam/swin-daf-chaos-mri`](https://huggingface.co/MounishAllam/swin-daf-chaos-mri) on HF Hub |
 | **Dataset** | [CHAOS](https://chaos.grand-challenge.org/) T2-SPIR MRI, 20 subjects, subject-level 16/2/2 split |
-| **Cost** | **$0** — free-tier Groq LLM, local sentence-transformers embeddings, local RTX 5080 training |
+| **Cost** | **$0 cloud/API cost** — free-tier Groq LLM, local sentence-transformers embeddings; training itself used a local RTX 5080 (not free hardware, just not a cloud bill) |
 | **Test-set result** | SwinDAF 0.762 mean Dice (2D) vs. 0.702 DAF baseline — see [Results](#results) for the full breakdown, including a disclosed failure case |
 | **RAG grounding** | Cuts unsupported-claim rate 1.3% → 0.6%, raises uncertainty-flagging 28% → 100% — see [Report grounding evaluation](#report-grounding-evaluation-rag-beforeafter) |
 
