@@ -43,7 +43,12 @@ def load_vectorstore(index_dir: Path = INDEX_DIR) -> FAISS:
     exclusively from our own committed knowledge_base/ files by
     rag/build_index.py - never from user-supplied or untrusted input.
     """
-    embeddings = HuggingFaceEmbeddings(model_name=EMBEDDING_MODEL_NAME)
+    # token=False: this is a public model and never needs auth. Without this, a stale/invalid
+    # cached HF login token (e.g. from `hf auth login` for unrelated checkpoint uploads) can
+    # get attached implicitly and cause a 401 on this request.
+    embeddings = HuggingFaceEmbeddings(
+        model_name=EMBEDDING_MODEL_NAME, model_kwargs={"token": False}
+    )
     return FAISS.load_local(
         str(index_dir), embeddings, allow_dangerous_deserialization=True
     )

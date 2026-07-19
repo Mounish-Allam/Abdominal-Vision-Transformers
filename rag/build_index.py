@@ -112,7 +112,12 @@ def build_index(kb_dir: Path = KB_DIR, out_dir: Path = INDEX_DIR) -> None:
     docs = load_documents(kb_dir)
     chunks = split_documents(docs)
 
-    embeddings = HuggingFaceEmbeddings(model_name=EMBEDDING_MODEL_NAME)
+    # token=False: this is a public model and never needs auth. Without this, a stale/invalid
+    # cached HF login token (e.g. from `hf auth login` for unrelated checkpoint uploads) can
+    # get attached implicitly and cause a 401 on this request.
+    embeddings = HuggingFaceEmbeddings(
+        model_name=EMBEDDING_MODEL_NAME, model_kwargs={"token": False}
+    )
     vectorstore = FAISS.from_documents(chunks, embeddings)
 
     out_dir.mkdir(parents=True, exist_ok=True)
