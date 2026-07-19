@@ -412,6 +412,29 @@ Raw metrics: `outputs/test_metrics_swin_daf_*.json`, `outputs/test_metrics_daf_*
 
 **Trained weights:** [`MounishAllam/swin-daf-chaos-mri`](https://huggingface.co/MounishAllam/swin-daf-chaos-mri) on the Hugging Face Hub.
 
+### Organ performance at a glance (SwinDAF, best → worst)
+
+| Rank | 2D per-slice Dice | 3D volumetric Dice |
+|---|---|---|
+| 1 (best) | Left Kidney — 0.816 | Right Kidney — 0.910 |
+| 2 | Right Kidney — 0.812 | Left Kidney — 0.898 |
+| 3 | Spleen — 0.731 | Liver — 0.479 |
+| 4 (worst) | Liver — 0.689 | Spleen — 0.393 |
+
+**The ranking flips between metrics, and that flip is the real finding.** Both kidneys are
+reliably strong on either metric — no caveats needed there. Liver and Spleen look like ordinary
+"third and fourth place, still respectable" scores on the 2D metric, but collapse to the two
+worst-performing organs by a wide margin once measured in 3D. That's not two separate findings;
+it's the same Subject 15 failure (see [Failure analysis](#failure-analysis) below) hidden by the
+2D metric's tendency to average in slices where an organ is correctly predicted as absent. The
+3D number is the one to trust for "how good is this model at segmenting the liver," since it
+scores the whole reconstructed organ once instead of slice-by-slice.
+
+The qualitative panel below shows exactly what this looks like: the "Best slice" example is 0.99
+mean Dice on Subject 1; the "Worst slice" example is Subject 15, slice 16, where the model
+predicts no Liver or Spleen pixels at all — a direct picture of the 3D-Dice-0.014/0.000 failure
+in the table above.
+
 ### Qualitative Examples (real SwinDAF checkpoint, real test slices)
 
 Each panel is **Input MRI · Ground Truth overlay · Prediction overlay** (🔴 Liver · 🟢 Right
