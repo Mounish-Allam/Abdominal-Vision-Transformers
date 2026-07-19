@@ -1,16 +1,3 @@
----
-title: Abdominal MRI Organ Segmentation — SwinDAF
-emoji: 🏥
-colorFrom: blue
-colorTo: indigo
-sdk: gradio
-sdk_version: "4.0.0"
-python_version: "3.11"
-app_file: app.py
-pinned: false
-license: mit
----
-
 # Abdominal MRI Organ Segmentation — SwinDAF
 
 > **Swin Transformer encoder + Dual Attention Fusion decoder for multi-organ segmentation on CHAOS MRI**
