@@ -161,12 +161,14 @@ Dataset split used:
 ├── scripts/
 │   ├── make_results_table.py    # Regenerates the README Results tables from outputs/*.json
 │   └── make_qualitative_examples.py  # Generates real best/median/worst overlay images
-├── tests/                       # pytest suite (RAG + report logic, all mocked, no GPU/network)
+├── tests/                       # pytest suite (model + RAG + report logic, all mocked/CPU, no GPU/network)
 ├── examples/                    # Bundled test-split slices for the HF Space's one-click demo
 ├── DataSet/                     # CHAOS MRI slices (train/val/test) — gitignored, from prepare_data.py
 ├── model/                       # Saved checkpoints — .pth gitignored, download via HF Hub
-├── outputs/                     # Metrics JSONs + qualitative images (tracked — the evaluation paper trail)
+├── outputs/                     # Metrics JSONs, qualitative images, analytics.db (tracked — the evaluation paper trail)
 ├── app.py                       # Hugging Face Spaces entry point
+├── analytics.py                 # SQLite logging for evaluate.py + demo.py inferences
+├── queries.sql                  # Documented SQL queries over outputs/analytics.db
 ├── evaluate.py                  # Test-set Dice evaluation (2D + 3D per-subject)
 ├── prepare_data.py              # Download & preprocess CHAOS via kagglehub
 ├── upload_weights.py            # Upload checkpoint + model card to HF Hub
@@ -549,6 +551,66 @@ python rag/tally_scores.py
 ```
 
 </details>
+
+---
+
+## SQL analytics
+
+`analytics.py` logs every inference to a local SQLite database (`outputs/analytics.db`,
+stdlib `sqlite3` only, no extra dependency): one row per slice in `inferences`, one row per
+organ per slice in `organ_stats` (pixel coverage, confidence, entropy, the low-confidence
+flag, and Dice whenever ground truth is available). `evaluate.py` logs every test-set slice
+with real Dice scores; `src/demo.py` logs every live dashboard inference (no Dice, since
+user-uploaded slices have no ground truth) best-effort, so a logging failure never breaks the
+UI. Documented queries live in [`queries.sql`](queries.sql).
+
+**Example: does the SQL aggregate match the JSON-derived results table above?**
+```sql
+SELECT i.model_name, o.organ, ROUND(AVG(o.dice), 4), COUNT(*)
+FROM organ_stats o JOIN inferences i ON i.id = o.inference_id
+WHERE i.source = 'evaluate' AND o.dice IS NOT NULL
+GROUP BY i.model_name, o.organ ORDER BY i.model_name, 3 DESC;
+```
+```
+daf       | Right Kidney | 0.7987 | 62
+daf       | Left Kidney  | 0.7383 | 62
+daf       | Spleen       | 0.7056 | 62
+daf       | Liver        | 0.5652 | 62
+swin_daf  | Left Kidney  | 0.8162 | 62
+swin_daf  | Right Kidney | 0.8122 | 62
+swin_daf  | Spleen       | 0.7309 | 62
+swin_daf  | Liver        | 0.6891 | 62
+```
+Yes — matches the [2D Dice table](#test-set-dice-score-2d-per-slice-mean--std) above exactly,
+computed independently from raw per-slice rows instead of the pre-aggregated JSON.
+
+**Example: how often does SwinDAF flag a region for human review, per organ?**
+```sql
+SELECT o.organ, SUM(o.low_confidence), COUNT(*),
+       ROUND(100.0 * SUM(o.low_confidence) / COUNT(*), 1)
+FROM organ_stats o JOIN inferences i ON i.id = o.inference_id
+WHERE i.model_name = 'swin_daf'
+GROUP BY o.organ ORDER BY 4 DESC;
+```
+```
+Right Kidney | 2 | 62 | 3.2%
+Left Kidney  | 1 | 62 | 1.6%
+Liver        | 0 | 62 | 0.0%
+Spleen       | 0 | 62 | 0.0%
+```
+Worth noting: this is the opposite of what the Dice numbers alone would suggest — the model
+is *most* confident on Liver despite Liver having the worst 3D Dice score, because low
+confidence and low Dice measure different failure modes (the model can be wrong while
+"confident," which is exactly why grounding a clinical report in confidence scores alone,
+without RAG's uncertainty language, isn't sufficient - see
+[Report grounding evaluation](#report-grounding-evaluation-rag-beforeafter) above).
+
+**Reproduce this database from a fresh clone:**
+```bash
+python evaluate.py --weights model/Best_SwinDAF-CHAOS.pth --model swin_daf --split test
+python evaluate.py --weights model/Best_DAF-baseline.pth  --model daf      --split test
+sqlite3 outputs/analytics.db < queries.sql
+```
 
 ---
 

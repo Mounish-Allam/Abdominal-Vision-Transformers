@@ -13,6 +13,8 @@ Run:
 import sys
 import os
 import io
+import time
+import uuid
 import argparse
 import glob
 import numpy as np
@@ -34,6 +36,9 @@ from report_generator import (
     CONFIDENCE_THRESHOLD,
     ENTROPY_THRESHOLD,
 )
+
+import analytics
+from llm.provider import provider_name
 
 # ── Constants ─────────────────────────────────────────────────────────────────
 ORGAN_COLORS_NORM = {
@@ -323,7 +328,9 @@ def run_analysis(image, weights_path, encoder_name, api_key, use_rag):
     model  = _cache[key]
     pil    = Image.fromarray(image) if isinstance(image, np.ndarray) else image
     tensor = preprocess(pil)
+    t0 = time.perf_counter()
     mask, probs = run_model(model, tensor, device)
+    latency = time.perf_counter() - t0
 
     overlay    = make_overlay(pil, mask)
     boundary   = make_boundary_overlay(pil, mask)
@@ -336,6 +343,19 @@ def run_analysis(image, weights_path, encoder_name, api_key, use_rag):
     donut      = make_pixel_donut(stats)
     stats_md   = stats_to_markdown(stats)
     report, passages_md = generate_report(stats, api_key=api_key, use_rag=use_rag)
+
+    try:
+        analytics.log_inference(
+            slice_id=f"live_{uuid.uuid4().hex[:8]}",
+            source="demo",
+            model_name="swin_daf",
+            encoder_name=encoder_name,
+            llm_provider=provider_name(),
+            latency_seconds=latency,
+            organ_stats={ORGAN_NAMES[i]: stats[i] for i in range(1, 5)},
+        )
+    except Exception as exc:
+        print(f"[analytics] logging failed (non-fatal): {exc}")
 
     return overlay, boundary, conf_map, entropy, prob_maps, prob_hist, bar_chart, donut, stats_md, report, passages_md
 

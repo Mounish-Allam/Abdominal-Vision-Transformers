@@ -25,6 +25,7 @@ import json
 import random
 import re
 import sys
+import time
 from collections import defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
@@ -40,6 +41,7 @@ REPO_ROOT = Path(__file__).resolve().parent
 SRC_DIR = REPO_ROOT / "src"
 sys.path.insert(0, str(SRC_DIR))
 
+import analytics  # noqa: E402
 from common.utils import getTargetSegmentation  # noqa: E402
 from data import medicalDataLoader  # noqa: E402
 from models.my_stacked_danet import DAF_stack  # noqa: E402
@@ -47,6 +49,9 @@ from models.swin_danet import SwinDAF  # noqa: E402
 
 ORGAN_NAMES = {1: "Liver", 2: "Right Kidney", 3: "Left Kidney", 4: "Spleen"}
 NUM_CLASSES = 5
+# Same thresholds src/demo.py uses to flag a region for human review.
+CONFIDENCE_THRESHOLD = 0.5
+ENTROPY_THRESHOLD = 1.0
 IMG_SIZE = 224
 FILENAME_RE = re.compile(r"Subj_(\d+)slice_(\d+)\.png")
 
@@ -117,6 +122,10 @@ def main() -> None:
     parser.add_argument("--num_workers", default=0, type=int, help="0 is safest on Windows")
     parser.add_argument("--seed", default=42, type=int)
     parser.add_argument("--out_dir", default="outputs", type=str)
+    parser.add_argument(
+        "--no_log_db", action="store_true",
+        help="Skip logging per-slice results to outputs/analytics.db",
+    )
     args = parser.parse_args()
 
     set_seed(args.seed)
@@ -150,20 +159,26 @@ def main() -> None:
     pred_volumes: dict[str, dict[int, list[tuple[int, np.ndarray]]]] = defaultdict(lambda: defaultdict(list))
     gt_volumes: dict[str, dict[int, list[tuple[int, np.ndarray]]]] = defaultdict(lambda: defaultdict(list))
 
+    db_path = REPO_ROOT / args.out_dir / "analytics.db"
+
     with torch.no_grad():
         for image, labels, img_paths in loader:
+            t0 = time.perf_counter()
             image = image.to(device)
             logits = net(image)
             probs = F.softmax(logits, dim=1)
             pred_mask = probs.argmax(dim=1).squeeze(0).cpu().numpy().astype(np.uint8)
+            latency = time.perf_counter() - t0
 
             # Reuse the exact same GT decoding as training (common.utils.getTargetSegmentation)
             # so class thresholds can never drift between train/eval.
             gt_mask = getTargetSegmentation(labels).cpu().numpy().astype(np.uint8)
             gt_mask = np.clip(gt_mask, 0, NUM_CLASSES - 1)
 
+            slice_dice: dict[int, float] = {}
             for cls in ORGAN_NAMES:
-                dice_2d_scores[cls].append(dice_2d(pred_mask, gt_mask, cls))
+                slice_dice[cls] = dice_2d(pred_mask, gt_mask, cls)
+                dice_2d_scores[cls].append(slice_dice[cls])
 
             parsed = parse_subject_slice(img_paths[0])
             if parsed is not None:
@@ -171,6 +186,38 @@ def main() -> None:
                 for cls in ORGAN_NAMES:
                     pred_volumes[subj_id][cls].append((slice_num, pred_mask == cls))
                     gt_volumes[subj_id][cls].append((slice_num, gt_mask == cls))
+
+            if not args.no_log_db:
+                probs_np = probs.squeeze(0).cpu().numpy()  # (5, H, W)
+                entropy_map = -(probs_np * np.log(probs_np + 1e-8)).sum(axis=0)
+                total_px = pred_mask.size
+                organ_stats = {}
+                for cls, name in ORGAN_NAMES.items():
+                    organ_mask = pred_mask == cls
+                    count = int(organ_mask.sum())
+                    stats = {"pixels": count, "pct": count / total_px * 100}
+                    if count > 0:
+                        mean_conf = float(probs_np[cls][organ_mask].mean())
+                        mean_ent = float(entropy_map[organ_mask].mean())
+                        stats["mean_confidence"] = mean_conf
+                        stats["mean_entropy"] = mean_ent
+                        stats["low_confidence"] = (
+                            mean_conf < CONFIDENCE_THRESHOLD or mean_ent > ENTROPY_THRESHOLD
+                        )
+                    else:
+                        stats["low_confidence"] = None
+                    organ_stats[name] = stats
+
+                analytics.log_inference(
+                    db_path,
+                    slice_id=Path(img_paths[0]).stem,
+                    source="evaluate",
+                    model_name=args.model,
+                    encoder_name=args.swin_encoder if args.model == "swin_daf" else None,
+                    latency_seconds=latency,
+                    organ_stats=organ_stats,
+                    dice_scores={name: slice_dice[cls] for cls, name in ORGAN_NAMES.items()},
+                )
 
     # ── 2D per-slice summary ──────────────────────────────────────────────
     per_organ_2d = {}
