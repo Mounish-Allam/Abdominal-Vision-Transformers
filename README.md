@@ -211,7 +211,7 @@ This installs PyTorch, timm, Gradio, Groq, and all other dependencies.
 
 > **Windows users:** If you have multiple Python versions, use the full path:
 > ```powershell
-> C:\Users\<you>\AppData\Local\Programs\Python\Python313\python.exe -m pip install -r requirements.txt
+> C:\Users\<you>\AppData\Local\Programs\Python\Python311\python.exe -m pip install -r requirements.txt
 > ```
 
 ---
@@ -362,10 +362,12 @@ it has no effect on segmentation Dice, which comes from the Swin+DAF network alo
 
 ## Requirements
 
-All dependencies are pinned with minimum versions in [`requirements.txt`](requirements.txt) —
-that file (not this README) is the source of truth, so it never drifts out of sync as
-dependencies are added. Broadly: PyTorch/timm/Gradio for the model and dashboard, and the
-LangChain family + `sentence-transformers` + `faiss-cpu` for the RAG grounding layer.
+All dependencies are pinned to exact, verified-working versions in
+[`requirements.txt`](requirements.txt) — that file (not this README) is the source of truth,
+so it never drifts out of sync as dependencies are added. Broadly: PyTorch/timm/Gradio for the
+model and dashboard, and the LangChain family + `sentence-transformers` + `faiss-cpu` for the
+RAG grounding layer. `torch`/`torchvision` are the one exception, kept as a minimum-version
+floor since the right build (CPU vs. a specific CUDA version) depends on the machine.
 
 ```bash
 pip install -r requirements.txt
@@ -647,7 +649,7 @@ python upload_weights.py --weights model/Best_SwinDAF-CHAOS.pth --repo MounishAl
   README and in the app's footer. Outputs are for research/education only.
 - **Small test set (2 subjects, 62 slices)**, a deliberate consequence of never splitting
   CHAOS at the slice level. This makes the aggregate mean sensitive to a
-  single atypical subject — see [Failure analysis](#results) for the real, disclosed case.
+  single atypical subject — see [Failure analysis](#failure-analysis) for the real, disclosed case.
 - **The LLM-generated clinical report is decision-support text, not a medical finding.**
   Even with RAG grounding, it can still state details not supported by the measurements or
   retrieved passages (measured unsupported-claim rate: 0.6% with RAG, 1.3% without) — see
