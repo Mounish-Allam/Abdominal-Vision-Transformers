@@ -2,7 +2,8 @@
 Abdominal MRI Organ Segmentation — Gradio Dashboard
   Encoder : Swin Transformer (timm, ImageNet pretrained)
   Decoder : Dual Attention Fusion  (PAM + CAM + Semantic Module)
-  Report  : Groq LLM  (llama-3.3-70b-versatile, free tier)
+  Report  : LLM via src/llm/provider.py (default: Groq llama-3.3-70b-versatile;
+            LLM_PROVIDER=ollama for a local/private Qwen3-8B alternative)
 
 Run:
     python src/demo.py
@@ -58,7 +59,7 @@ DESCRIPTION = """
 
 **Architecture** — Swin Transformer encoder + Dual Attention Fusion decoder (PAM · CAM · Semantic Module)
 **Dataset** — CHAOS MRI · 5 classes: Background · Liver · Right Kidney · Left Kidney · Spleen
-**Report** — Groq LLM clinical impression (Llama 3.3 70B · free tier)
+**Report** — LLM clinical impression (Groq Llama 3.3 70B by default, free tier; swappable to a local Ollama Qwen3-8B via `LLM_PROVIDER=ollama`)
 """
 
 # ── Model ─────────────────────────────────────────────────────────────────────
@@ -368,12 +369,13 @@ def build_ui(default_weights="", default_encoder="swin_tiny_patch4_window7_224",
                         info="Leave blank for random-weight demo mode",
                     )
 
-                with gr.Accordion("LLM Report — Groq (free)", open=False):
+                with gr.Accordion("LLM Report (provider set via LLM_PROVIDER env var)", open=False):
                     api_key_in = gr.Textbox(
-                        label="Groq API Key",
+                        label="Groq API Key (only used when LLM_PROVIDER=groq, the default)",
                         placeholder="gsk_...",
                         type="password",
-                        info="Free key at console.groq.com or set GROQ_API_KEY env var",
+                        info="Free key at console.groq.com or set GROQ_API_KEY env var. "
+                             "Ignored for LLM_PROVIDER=ollama/openai_compatible.",
                     )
                     use_rag_in = gr.Checkbox(
                         value=default_use_rag,
@@ -407,7 +409,7 @@ def build_ui(default_weights="", default_encoder="swin_tiny_patch4_window7_224",
                             donut_out = gr.Image(label="Pixel Distribution", height=280)
 
                 stats_out  = gr.Markdown(label="Organ Statistics")
-                report_out = gr.Textbox(label="Clinical Report (Groq LLM)", lines=7, interactive=False)
+                report_out = gr.Textbox(label="Clinical Report (LLM)", lines=7, interactive=False)
                 with gr.Accordion("Retrieved passages (grounding)", open=False):
                     passages_out = gr.Markdown(label="Retrieved Passages")
 

@@ -30,14 +30,14 @@ class _FakeLLM:
 
 def test_generate_report_no_api_key_returns_message(monkeypatch):
     monkeypatch.delenv("GROQ_API_KEY", raising=False)
+    monkeypatch.delenv("LLM_PROVIDER", raising=False)
     report, passages_md = report_generator.generate_report(_stats(), api_key="")
     assert "API key" in report
     assert passages_md == ""
 
 
 def test_generate_report_use_rag_false_skips_retrieval(monkeypatch):
-    monkeypatch.setenv("GROQ_API_KEY", "fake-key")
-    monkeypatch.setattr(report_generator, "ChatGroq", _FakeLLM)
+    monkeypatch.setattr(report_generator, "get_llm_client", lambda **kwargs: _FakeLLM())
 
     def _boom():
         raise AssertionError("_get_vectorstore should not be called when use_rag=False")
@@ -51,8 +51,7 @@ def test_generate_report_use_rag_false_skips_retrieval(monkeypatch):
 
 
 def test_generate_report_falls_back_when_index_missing(monkeypatch):
-    monkeypatch.setenv("GROQ_API_KEY", "fake-key")
-    monkeypatch.setattr(report_generator, "ChatGroq", _FakeLLM)
+    monkeypatch.setattr(report_generator, "get_llm_client", lambda **kwargs: _FakeLLM())
 
     def _raise_not_found():
         raise FileNotFoundError("no index")
@@ -64,6 +63,18 @@ def test_generate_report_falls_back_when_index_missing(monkeypatch):
     assert report == "Canned report text."
     assert "RAG unavailable" in passages_md
     assert "build_index.py" in passages_md
+
+
+def test_generate_report_propagates_provider_error(monkeypatch):
+    def _raise(**kwargs):
+        raise report_generator.ProviderError("boom: no endpoint configured")
+
+    monkeypatch.setattr(report_generator, "get_llm_client", _raise)
+
+    report, passages_md = report_generator.generate_report(_stats())
+
+    assert report == "boom: no endpoint configured"
+    assert passages_md == ""
 
 
 def test_prompts_request_findings_and_impression_sections():

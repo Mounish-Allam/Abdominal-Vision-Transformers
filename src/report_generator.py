@@ -1,13 +1,11 @@
 from __future__ import annotations
 
-import os
 import sys
 from pathlib import Path
 
 try:
     from langchain_core.documents import Document
     from langchain_core.prompts import ChatPromptTemplate
-    from langchain_groq import ChatGroq
 
     LANGCHAIN_AVAILABLE = True
 except ImportError:
@@ -16,6 +14,8 @@ except ImportError:
 _REPO_ROOT = Path(__file__).resolve().parent.parent
 if str(_REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(_REPO_ROOT))
+
+from llm.provider import ProviderError, get_llm_client
 
 ORGAN_NAMES = {1: "Liver", 2: "Right Kidney", 3: "Left Kidney", 4: "Spleen"}
 
@@ -153,11 +153,13 @@ def generate_report(
     Returns (report_markdown, passages_markdown). passages_markdown is "" when
     use_rag is False or no passages were retrieved/available.
     """
-    key = api_key.strip() or os.environ.get("GROQ_API_KEY", "")
-    if not key:
-        return "No Groq API key provided. Get a free key at console.groq.com and enter it above.", ""
     if not LANGCHAIN_AVAILABLE:
-        return "Run: pip install langchain-groq langchain-core", ""
+        return "Run: pip install langchain-groq langchain-openai langchain-core", ""
+
+    try:
+        llm = get_llm_client(api_key=api_key)
+    except ProviderError as exc:
+        return str(exc), ""
 
     measurements = _format_measurements(organ_stats)
     passages_md = ""
@@ -182,7 +184,6 @@ def generate_report(
         else:
             prompt = _legacy_prompt(measurements)
 
-        llm = ChatGroq(model="llama-3.3-70b-versatile", temperature=0.2, api_key=key)
         messages = prompt.format_messages()
         response = llm.invoke(messages)
         text = response.content
