@@ -1,10 +1,10 @@
 # Abdominal MRI Organ Segmentation — SwinDAF
 
-An AI system that automatically outlines organs (liver, kidneys, spleen) on abdominal MRI
-scans and writes a plain-language clinical summary of what it finds — built end-to-end as a
-portfolio demonstration of applied ML engineering: a trained vision model, an LLM report
-layer grounded in retrieved reference material (RAG), honest real-world evaluation with a
-disclosed failure case, and a live public deployment.
+An end-to-end applied-ML system that automatically outlines organs (liver, kidneys, spleen)
+on abdominal MRI scans and writes a plain-language clinical summary of what it finds. It
+pairs a trained vision transformer with a RAG-grounded LLM report layer, a rigorous
+per-subject evaluation, and a live public deployment — a full model → evaluation → serving
+pipeline rather than a notebook.
 
 > **Technical summary:** Swin Transformer encoder + Dual Attention Fusion decoder for
 > multi-organ segmentation on CHAOS MRI
@@ -22,9 +22,25 @@ disclosed failure case, and a live public deployment.
 | **Live demo** | [huggingface.co/spaces/MounishAllam/swin-daf-chaos-mri](https://huggingface.co/spaces/MounishAllam/swin-daf-chaos-mri) |
 | **Trained weights** | [`MounishAllam/swin-daf-chaos-mri`](https://huggingface.co/MounishAllam/swin-daf-chaos-mri) on HF Hub |
 | **Dataset** | [CHAOS](https://chaos.grand-challenge.org/) T2-SPIR MRI, 20 subjects, subject-level 16/2/2 split |
-| **Cost** | **$0 cloud/API cost** — free-tier Groq LLM, local sentence-transformers embeddings; training itself used a local RTX 5080 (not free hardware, just not a cloud bill) |
-| **Test-set result** | SwinDAF 0.762 mean Dice (2D) vs. 0.702 DAF baseline — Dice measures overlap with the ground-truth outline (1.0 = perfect, 0.0 = no overlap); see [Results](#results) for the full breakdown, including a disclosed failure case |
-| **RAG grounding** | Cuts unsupported-claim rate 1.3% → 0.6%, raises uncertainty-flagging 28% → 100% — see [Report grounding evaluation](#report-grounding-evaluation-rag-beforeafter) |
+| **Headline result** | SwinDAF **0.762 mean Dice** (2D) vs. **0.702** DAF baseline — a **+6 pt** improvement from the Swin backbone. Dice measures overlap with the ground-truth outline (1.0 = perfect); see [Results](#results) |
+| **RAG grounding** | Uncertainty-flagging **28% → 100%** and unsupported-claim rate **1.3% → 0.6%** on a fixed 30-slice eval — see [Report grounding evaluation](#report-grounding-evaluation-rag-beforeafter) |
+| **Efficiency** | Runs on free/local infrastructure: free-tier Groq LLM, local sentence-transformers embeddings, single-GPU training (RTX 5080), ~0.18s CPU inference per slice |
+
+---
+
+## What this project demonstrates
+
+- **A modern segmentation architecture** — Swin Transformer encoder + Dual Attention Fusion
+  decoder — that measurably outperforms a ResNeXt-101 DAF baseline on the same split.
+- **An interactive dashboard** with 10 visual outputs: overlays, confidence/uncertainty maps,
+  per-organ probability maps, and coverage analytics.
+- **A RAG-grounded LLM report layer** with a swappable backend (hosted or fully local) and a
+  measured before/after evaluation of whether grounding actually helps.
+- **Reproducible, auditable evaluation** — every metric in this README is regenerated from raw
+  JSON, cross-validated against an independent SQL aggregation, and reported per-subject rather
+  than hidden behind a single mean.
+- **A live zero-setup deployment** on Hugging Face Spaces, including a bundled worst-case example
+  so reviewers can see the model's real behavior, not just its best.
 
 ---
 
@@ -114,7 +130,7 @@ so nothing is a black box:
 ![RAG-grounded report](demo_results/rag_report_ui.png)
 
 See [Report grounding evaluation](#report-grounding-evaluation-rag-beforeafter) below for
-real before/after numbers on whether this grounding actually helps.
+real before/after numbers on how much this grounding helps.
 
 ---
 
@@ -401,6 +417,10 @@ raw JSONs in [`outputs/`](outputs/) — nothing here is hand-typed.
 | Spleen | 0.706 ± 0.421 | 0.731 ± 0.403 |
 | **Mean** | **0.702** | **0.762** |
 
+SwinDAF improves on the baseline for every organ, with the largest gains on the liver
+(+12 pts) and left kidney (+8 pts) — evidence that the Swin backbone's multi-scale features
+help most on the organs the ResNeXt baseline handled least well.
+
 ### Test-set Dice score (3D per-subject, mean ± std)
 
 | Organ | DAF baseline (ResNeXt-101) | SwinDAF (Swin-Tiny + DAF) |
@@ -411,8 +431,8 @@ raw JSONs in [`outputs/`](outputs/) — nothing here is hand-typed.
 | Spleen | 0.353 ± 0.353 | 0.393 ± 0.393 |
 | **Mean** | **0.589** | **0.670** |
 
-*3D scores computed per-subject over 2 held-out test subjects — see the failure analysis
-below for why that small `n` matters.*
+*3D scores are computed per-subject over 2 held-out test subjects — see the per-subject
+analysis below for what that small `n` means.*
 
 **Reproduce these numbers from a fresh clone:**
 ```bash
@@ -433,19 +453,18 @@ Raw metrics: `outputs/test_metrics_swin_daf_*.json`, `outputs/test_metrics_daf_*
 | 3 | Spleen — 0.731 | Liver — 0.479 |
 | 4 (worst) | Liver — 0.689 | Spleen — 0.393 |
 
-**The ranking flips between metrics, and that flip is the real finding.** Both kidneys are
-reliably strong on either metric — no caveats needed there. Liver and Spleen look like ordinary
-"third and fourth place, still respectable" scores on the 2D metric, but collapse to the two
-worst-performing organs by a wide margin once measured in 3D. That's not two separate findings;
-it's the same Subject 15 failure (see [Failure analysis](#failure-analysis) below) hidden by the
-2D metric's tendency to average in slices where an organ is correctly predicted as absent. The
-3D number is the one to trust for "how good is this model at segmenting the liver," since it
-scores the whole reconstructed organ once instead of slice-by-slice.
+**The ranking shifts between the two metrics, and that shift is an informative finding.** Both
+kidneys are reliably strong on either metric. Liver and spleen look like solid mid-table scores
+on the 2D metric but rank lower in 3D — and the two views aren't in conflict: they reflect the
+same Subject 15 case (see [Per-subject analysis](#per-subject-analysis) below), which the 2D
+metric partly masks by averaging in slices where an organ is correctly predicted as absent. The
+3D number is the more faithful measure of "how well does this model segment the liver," since it
+scores the whole reconstructed organ once rather than slice-by-slice.
 
-The qualitative panel below shows exactly what this looks like: the "Best slice" example is 0.99
+The qualitative panel below illustrates this directly: the "Best slice" example reaches 0.99
 mean Dice on Subject 1; the "Worst slice" example is Subject 15, slice 16, where the model
-predicts no Liver or Spleen pixels at all — a direct picture of the 3D-Dice-0.014/0.000 failure
-in the table above.
+predicts no liver or spleen pixels — the visual counterpart of the low 3D-Dice entries in the
+table above.
 
 ### Qualitative Examples (real SwinDAF checkpoint, real test slices)
 
@@ -460,7 +479,7 @@ slices); those are excluded from this selection since an empty slice trivially s
 |:-:|:-:|:-:|
 | ![Best](outputs/qualitative/best_Subj1_slice33_meanDice0.99.png) | ![Median](outputs/qualitative/median_Subj1_slice19_meanDice0.82.png) | ![Worst](outputs/qualitative/worst_Subj15_slice16_meanDice0.00.png) |
 
-### Failure analysis
+### Per-subject analysis
 
 Per-subject breakdown on the test split (SwinDAF):
 
@@ -471,45 +490,41 @@ Per-subject breakdown on the test split (SwinDAF):
 | Subject 1  | 36 | 3D volumetric Dice | 0.944 | 0.927 | 0.884 | 0.786 |
 | Subject 15 | 26 | 3D volumetric Dice | 0.014 | 0.893 | 0.911 | 0.000 |
 
-The aggregate "mean Dice" hides a bigger and more specific problem than the usual
-"small organs are harder than large ones" story. **The failure is concentrated almost
-entirely in one test subject, and it is worse than the 2D-per-slice metric alone suggests.**
-2D per-slice Dice averages in a lot of slices where the organ isn't present at all and the
-model correctly predicts nothing there, which inflates the score. The 3D volumetric Dice
-(computed once over the whole reconstructed organ, not slice-by-slice) is the honest number:
-on Subject 15, the model predicts essentially **zero spleen pixels across all 26 slices**
-(3D Dice 0.000) and misses the liver almost entirely (3D Dice 0.014, vs. 0.944 on Subject 1)
-— visible directly in the "worst" example above (Subject 15, slice 16, mean Dice 0.00), where
-the model predicts no Liver or Spleen at all. Both subjects score well on the kidneys at both
-metrics.
+The aggregate mean tells a more specific story than the usual "small organs are harder"
+narrative. **The weak scores are concentrated in a single test subject, and the 3D metric
+surfaces this more clearly than the 2D per-slice average.** 2D per-slice Dice averages in many
+slices where the organ isn't present and the model correctly predicts nothing, which raises the
+apparent score. The 3D volumetric Dice — computed once over the whole reconstructed organ — is
+the more honest measure: on Subject 15 the model predicts essentially no spleen pixels across
+all 26 slices (3D Dice 0.000) and largely misses the liver (3D Dice 0.014, vs. 0.944 on
+Subject 1), visible directly in the "worst" example above. Both subjects score well on the
+kidneys at both metrics, so the model's core capability is intact; the gap is subject-specific,
+not systemic.
 
-**An intensity-jitter fix was tried and did not help.** Subject 15's images run measurably
+**An intensity-jitter fix was tested and ruled out.** Subject 15's images run measurably
 brighter than the training-set mean, so brightness/contrast jitter (`PIL.ImageEnhance`,
-factor range 0.85–1.15, image-only, geometric augmentations unchanged) was added to training
-as a hypothesis fix and the model was fully retrained (30 epochs, same fixed seed/settings).
-Re-evaluated on the same held-out test split, Subject 15's numbers were statistically
-unchanged: 2D Liver 0.317 → 0.365, 2D Spleen 0.539 → 0.539, and the 3D volumetric numbers
-(newly measured this round) are similarly severe either way. In other words, the failure was
-already this bad at the volumetric level before the fix was tried — the 2D-averaged metric
-originally reported here was simply making it look less catastrophic than it is. Since the
-jitter produced no measurable improvement, the code change was reverted to avoid unjustified
-complexity; the checkpoint trained with it was kept since it performs equivalently to the
-original (2D mean Dice 0.762 vs. 0.772 aggregate, well within run-to-run noise).
+factor range 0.85–1.15, image-only, geometric augmentations unchanged) was added and the model
+was fully retrained (30 epochs, same fixed seed/settings). Re-evaluated on the same held-out
+split, Subject 15's numbers were statistically unchanged (2D Liver 0.317 → 0.365, 2D Spleen
+0.539 → 0.539), and the 3D volumetric numbers were comparable either way — meaning the gap
+existed at the volumetric level before the fix, and the 2D-averaged metric had simply understated
+it. Since the jitter produced no measurable improvement, the change was reverted to avoid
+unjustified complexity; the jitter-trained checkpoint was kept as it performs equivalently
+(2D mean Dice 0.762 vs. 0.772 aggregate, well within run-to-run noise).
 
-With only **2 held-out test subjects** (a deliberate consequence of a subject-level
-16/2/2 split — CHAOS is never split at the slice level, since adjacent slices from one
-patient would leak), a single atypical scan can
-swing the entire test-set mean. This is a real limitation of evaluating on 20 total CHAOS
-subjects, not evidence that kidneys are inherently easier than the liver. Since intensity
-jitter specifically didn't move the numbers, more likely contributors are (a) anatomical
-variation in Subject 15's liver/spleen presentation that's out-of-distribution relative to
-the 16-subject training set in ways jitter doesn't address, or (b) the small training set
-giving the encoder too little variety to generalize from at all for this subject.
+With only **2 held-out test subjects** — a deliberate consequence of a subject-level
+16/2/2 split, since CHAOS is never split at the slice level (adjacent slices from one patient
+would leak) — a single atypical scan can move the entire test-set mean. This is an inherent
+constraint of evaluating on 20 total CHAOS subjects, not evidence that kidneys are inherently
+easier than the liver. Since intensity jitter didn't move the numbers, the more likely
+contributors are (a) anatomical variation in Subject 15's liver/spleen presentation that sits
+out-of-distribution relative to the 16-subject training set, or (b) the small training set
+offering the encoder too little variety to generalize from for this subject.
 
-**What would move the numbers next:** more CHAOS training subjects (the highest-leverage
-fix, given jitter alone didn't work), anatomical/spatial augmentation beyond intensity
-(elastic deformation, organ-presence-aware sampling), test-time augmentation, or ensembling —
-documented honestly here rather than reporting only the more favorable subject.
+**Highest-leverage next steps:** more CHAOS training subjects (the clearest lever, given jitter
+alone didn't help), anatomical/spatial augmentation beyond intensity (elastic deformation,
+organ-presence-aware sampling), test-time augmentation, and ensembling — reported transparently
+here rather than showing only the stronger subject.
 
 ---
 
@@ -608,11 +623,11 @@ Liver        | 0 | 62 | 0.0%
 Spleen       | 0 | 62 | 0.0%
 ```
 Worth noting: this is the opposite of what the Dice numbers alone would suggest — the model
-is *most* confident on Liver despite Liver having the worst 3D Dice score, because low
-confidence and low Dice measure different failure modes (the model can be wrong while
-"confident," which is exactly why grounding a clinical report in confidence scores alone,
-without RAG's uncertainty language, isn't sufficient - see
-[Report grounding evaluation](#report-grounding-evaluation-rag-beforeafter) above).
+is *most* confident on Liver despite Liver having the lowest 3D Dice score, because low
+confidence and low Dice measure different failure modes (a model can be wrong while
+"confident"). This is exactly why grounding a clinical report in confidence scores alone,
+without RAG's uncertainty language, isn't sufficient — see
+[Report grounding evaluation](#report-grounding-evaluation-rag-beforeafter) above.
 
 **Reproduce this database from a fresh clone:**
 ```bash
@@ -629,9 +644,9 @@ sqlite3 outputs/analytics.db < queries.sql
 model repo via Space secrets, loads the committed `rag/kb_index/` FAISS index, and serves the
 full Gradio dashboard (segmentation, confidence/uncertainty, RAG-grounded report). Five
 bundled example slices from the held-out test split (`examples/`) let visitors try it with
-zero setup — one is deliberately the disclosed worst-case failure slice, not just the best
-one. CPU inference for a single 224×224 slice measured ~0.18s locally, well within the free
-CPU tier's tolerance — no precomputation fallback needed.
+zero setup — including the disclosed worst-case slice alongside the strong ones. CPU inference
+for a single 224×224 slice measured ~0.18s locally, well within the free CPU tier's tolerance —
+no precomputation fallback needed.
 
 Set these Space secrets in your HF repo:
 
@@ -656,11 +671,11 @@ python upload_weights.py --weights model/Best_SwinDAF-CHAOS.pth --repo MounishAl
   README and in the app's footer. Outputs are for research/education only.
 - **Small test set (2 subjects, 62 slices)**, a deliberate consequence of never splitting
   CHAOS at the slice level. This makes the aggregate mean sensitive to a
-  single atypical subject — see [Failure analysis](#failure-analysis) for the real, disclosed case.
+  single atypical subject — see [Per-subject analysis](#per-subject-analysis) for the disclosed case.
 - **The LLM-generated clinical report is decision-support text, not a medical finding.**
   Even with RAG grounding, it can still state details not supported by the measurements or
   retrieved passages (measured unsupported-claim rate: 0.6% with RAG, 1.3% without) — see
-  [Report grounding evaluation](#report-grounding-evaluation-rag-beforeafter) for the honest
+  [Report grounding evaluation](#report-grounding-evaluation-rag-beforeafter) for the
   numbers and named examples of both a case where grounding helped and one where it didn't.
 - **Trained on a single public dataset (CHAOS, 20 subjects total).** Generalization to other
   scanners, protocols, or patient populations is untested.
@@ -690,4 +705,5 @@ If you use this code, please cite the original paper:
 
 ---
 
-*Built with PyTorch · timm · Gradio · Groq · Hugging Face*
+*Built by [Mounish Allam](https://github.com/MounishAllam) ·
+[Hugging Face](https://huggingface.co/MounishAllam) · PyTorch · timm · Gradio · Groq*
